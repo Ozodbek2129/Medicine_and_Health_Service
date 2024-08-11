@@ -66,3 +66,39 @@ func (s *HealthService) ListMedicalRecords(ctx context.Context,req *pb.ListMedic
 	}
 	return resp,nil
 }
+
+func (s *HealthService) AddLifestyleData(ctx context.Context,req *pb.AddLifestyleDataRequest)(*pb.AddLifestyleDataResponse,error){
+	resp,err:=s.health.AddLifestyleData(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("AddLifestyleData service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
+func (s *HealthService) GetLifestyleData(ctx context.Context,req *pb.GetLifestyleDataRequest)(*pb.GetLifestyleDataResponse,error){
+	resp,err:=s.health.GetLifestyleData(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("GetLifestyleData service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
+func (s *HealthService) UpdateLifestyleData(ctx context.Context,req *pb.UpdateLifestyleDataRequest)(*pb.UpdateLifestyleDataResponse,error){
+	resp,err:=s.health.UpdateLifestyleData(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("UpdateLifestyleData service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
+func (s *HealthService) DeleteLifestyleData(ctx context.Context,req *pb.DeleteLifestyleDataRequest)(*pb.DeleteLifestyleDataResponse,error){
+	resp,err:=s.health.DeleteLifestyleData(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("DeleteLifestyleData service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}

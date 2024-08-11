@@ -155,3 +155,83 @@ func (h *Health) ListMedicalRecords(ctx context.Context, req *pb.ListMedicalReco
 
 	return &pb.ListMedicalRecordsResponse{MedicalRecords: records}, nil
 }
+
+// AddLifestyleData yangi turmush tarzi ma'lumotlarini qo'shadi
+func (h *Health) AddLifestyleData(ctx context.Context, req *pb.AddLifestyleDataRequest) (*pb.AddLifestyleDataResponse, error) {
+	lifestyleData := &pb.LifestyleData{
+		Id:            uuid.NewString(),
+		UserId:        req.UserId,
+		DataType:      req.DataType,
+		DataValue:     req.DataValue,
+		RecordedDate:  req.RecordedDate,
+		CreatedAt:     time.Now().Format(time.RFC3339),
+		UpdatedAt:     time.Now().Format(time.RFC3339),
+	}
+
+	_, err := h.Db.Collection("lifestyle_data").InsertOne(ctx, lifestyleData)
+	if err != nil {
+		h.Logger.Error("Failed to add lifestyle data", "error", err)
+		return nil, err
+	}
+
+	return &pb.AddLifestyleDataResponse{LifestyleData: lifestyleData}, nil
+}
+
+// GetLifestyleData turmush tarzi ma'lumotlarini olish uchun
+func (h *Health) GetLifestyleData(ctx context.Context, req *pb.GetLifestyleDataRequest) (*pb.GetLifestyleDataResponse, error) {
+	var lifestyleData pb.LifestyleData
+
+	err := h.Db.Collection("lifestyle_data").FindOne(ctx, bson.M{"id": req.Id}).Decode(&lifestyleData)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			h.Logger.Warn("Lifestyle data not found", "id", req.Id)
+			return nil, errors.New("turmush tarzi ma'lumotlari topilmadi")
+		}
+		h.Logger.Error("Failed to get lifestyle data", "error", err)
+		return nil, err
+	}
+
+	return &pb.GetLifestyleDataResponse{LifestyleData: &lifestyleData}, nil
+}
+
+// UpdateLifestyleData turmush tarzi ma'lumotlarini yangilash uchun
+func (h *Health) UpdateLifestyleData(ctx context.Context, req *pb.UpdateLifestyleDataRequest) (*pb.UpdateLifestyleDataResponse, error) {
+	update := bson.M{
+		"$set": bson.M{
+			"userid":       req.UserId,
+			"datatype":     req.DataType,
+			"datavalue":    req.DataValue,
+			"recordeddate": req.RecordedDate,
+			"updatedat":    time.Now().Format(time.RFC3339),
+		},
+	}
+
+	result, err := h.Db.Collection("lifestyle_data").UpdateOne(ctx, bson.M{"id": req.Id}, update)
+	if err != nil {
+		h.Logger.Error("Failed to update lifestyle data", "error", err)
+		return nil, err
+	}
+
+	if result.MatchedCount == 0 {
+		h.Logger.Warn("Lifestyle data not found for update", "id", req.Id)
+		return &pb.UpdateLifestyleDataResponse{Success: false}, errors.New("turmush tarzi ma'lumotlari topilmadi")
+	}
+
+	return &pb.UpdateLifestyleDataResponse{Success: true}, nil
+}
+
+// DeleteLifestyleData turmush tarzi ma'lumotlarini o'chirish uchun
+func (h *Health) DeleteLifestyleData(ctx context.Context, req *pb.DeleteLifestyleDataRequest) (*pb.DeleteLifestyleDataResponse, error) {
+	result, err := h.Db.Collection("lifestyle_data").DeleteOne(ctx, bson.M{"id": req.Id})
+	if err != nil {
+		h.Logger.Error("Failed to delete lifestyle data", "error", err)
+		return nil, err
+	}
+
+	if result.DeletedCount == 0 {
+		h.Logger.Warn("Lifestyle data not found for deletion", "id", req.Id)
+		return &pb.DeleteLifestyleDataResponse{Success: false}, errors.New("turmush tarzi ma'lumotlari topilmadi")
+	}
+
+	return &pb.DeleteLifestyleDataResponse{Success: true}, nil
+}
