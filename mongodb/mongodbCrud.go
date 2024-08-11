@@ -89,32 +89,37 @@ func (h *Health) GetMedicalRecord(ctx context.Context, req *pb.GetMedicalRecordR
 
 // UpdateMedicalRecord tibbiy yozuvni yangilash funksiyasi
 func (h *Health) UpdateMedicalRecord(ctx context.Context, req *pb.UpdateMedicalRecordRequest) (*pb.UpdateMedicalRecordResponse, error) {
-	req.MedicalRecord.UpdatedAt = time.Now().Format(time.RFC3339)
+    // Yangilash uchun vaqtni olish
+    updatedAt := time.Now().Format(time.RFC3339)
 
-	update := bson.M{
-		"$set": bson.M{
-			"record_type": req.MedicalRecord.RecordType,
-			"record_date": req.MedicalRecord.RecordDate,
-			"description": req.MedicalRecord.Description,
-			"doctor_id":   req.MedicalRecord.DoctorId,
-			"attachments": req.MedicalRecord.Attachments,
-			"updated_at":  req.MedicalRecord.UpdatedAt,
-		},
-	}
+    // Yangilash ma'lumotlarini tayyorlash
+    update := bson.M{
+        "$set": bson.M{
+            "record_type": req.RecordType,
+            "record_date": req.RecordDate,
+            "description": req.Description,
+            "doctor_id":   req.DoctorId,
+            "attachments": req.Attachments,
+            "updated_at":  updatedAt,
+        },
+    }
 
-	result, err := h.Db.Collection("medical_records").UpdateOne(ctx, bson.M{"id": req.MedicalRecord.Id}, update)
-	if err != nil {
-		h.Logger.Error("Failed to update medical record", "error", err)
-		return nil, err
-	}
+    // Tibbiy yozuvni yangilash
+    result, err := h.Db.Collection("medical_records").UpdateOne(ctx, bson.M{"id": req.Id}, update)
+    if err != nil {
+        h.Logger.Error("Failed to update medical record", "error", err)
+        return nil, err
+    }
 
-	if result.MatchedCount == 0 {
-		h.Logger.Warn("Medical record not found for update", "record_id", req.MedicalRecord.Id)
-		return &pb.UpdateMedicalRecordResponse{Success: false}, errors.New("tibbiy yozuv topilmadi")
-	}
+    // Yozuv yangilandi yoki yo'qligini tekshirish
+    if result.MatchedCount == 0 {
+        h.Logger.Warn("Medical record not found for update", "record_id", req.Id)
+        return &pb.UpdateMedicalRecordResponse{Success: false}, errors.New("tibbiy yozuv topilmadi")
+    }
 
-	return &pb.UpdateMedicalRecordResponse{Success: true}, nil
+    return &pb.UpdateMedicalRecordResponse{Success: true}, nil
 }
+
 
 // DeleteMedicalRecord tibbiy yozuvni o'chirish funksiyasi
 func (h *Health) DeleteMedicalRecord(ctx context.Context, req *pb.DeleteMedicalRecordRequest) (*pb.DeleteMedicalRecordResponse, error) {
