@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/google/uuid" // UUID paketini import qilish
+	"github.com/google/uuid" 
 	logger "health/pkg"
 	"log/slog"
 
@@ -16,13 +16,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// Health struktura MongoDB bilan ishlash uchun
 type Health struct {
 	Logger *slog.Logger
 	Db     *mongo.Database
 }
 
-// NewHealth yangi Health strukturasini yaratish
 func NewHealth(mdb *mongo.Database) *Health {
 	return &Health{
 		Logger: logger.NewLogger(),
@@ -30,7 +28,6 @@ func NewHealth(mdb *mongo.Database) *Health {
 	}
 }
 
-// AddMedicalRecord tibbiy yozuvni qo'shish funksiyasi
 func (h *Health) AddMedicalRecord(ctx context.Context, req *pb.AddMedicalRecordRequest) (*pb.AddMedicalRecordResponse, error) {
 	// Yangi UUID yaratish
 	id := uuid.New().String()
@@ -55,7 +52,6 @@ func (h *Health) AddMedicalRecord(ctx context.Context, req *pb.AddMedicalRecordR
 		return nil, err
 	}
 
-	// Response yaratish
 	medicalRecord := &pb.MedicalRecord{
 		Id:          id,
 		UserId:      req.UserId,
@@ -71,7 +67,6 @@ func (h *Health) AddMedicalRecord(ctx context.Context, req *pb.AddMedicalRecordR
 	return &pb.AddMedicalRecordResponse{MedicalRecord: medicalRecord}, nil
 }
 
-// GetMedicalRecord tibbiy yozuvni olish funksiyasi
 func (h *Health) GetMedicalRecord(ctx context.Context, req *pb.GetMedicalRecordRequest) (*pb.GetMedicalRecordResponse, error) {
 	var record pb.MedicalRecord
 	err := h.Db.Collection("medical_records").FindOne(ctx, bson.M{"id": req.Id}).Decode(&record)
@@ -87,12 +82,9 @@ func (h *Health) GetMedicalRecord(ctx context.Context, req *pb.GetMedicalRecordR
 	return &pb.GetMedicalRecordResponse{MedicalRecord: &record}, nil
 }
 
-// UpdateMedicalRecord tibbiy yozuvni yangilash funksiyasi
 func (h *Health) UpdateMedicalRecord(ctx context.Context, req *pb.UpdateMedicalRecordRequest) (*pb.UpdateMedicalRecordResponse, error) {
-    // Yangilash uchun vaqtni olish
     updatedAt := time.Now().Format(time.RFC3339)
 
-    // Yangilash ma'lumotlarini tayyorlash
     update := bson.M{
         "$set": bson.M{
             "record_type": req.RecordType,
@@ -104,14 +96,12 @@ func (h *Health) UpdateMedicalRecord(ctx context.Context, req *pb.UpdateMedicalR
         },
     }
 
-    // Tibbiy yozuvni yangilash
     result, err := h.Db.Collection("medical_records").UpdateOne(ctx, bson.M{"id": req.Id}, update)
     if err != nil {
         h.Logger.Error("Failed to update medical record", "error", err)
         return nil, err
     }
 
-    // Yozuv yangilandi yoki yo'qligini tekshirish
     if result.MatchedCount == 0 {
         h.Logger.Warn("Medical record not found for update", "record_id", req.Id)
         return &pb.UpdateMedicalRecordResponse{Success: false}, errors.New("tibbiy yozuv topilmadi")
@@ -121,7 +111,6 @@ func (h *Health) UpdateMedicalRecord(ctx context.Context, req *pb.UpdateMedicalR
 }
 
 
-// DeleteMedicalRecord tibbiy yozuvni o'chirish funksiyasi
 func (h *Health) DeleteMedicalRecord(ctx context.Context, req *pb.DeleteMedicalRecordRequest) (*pb.DeleteMedicalRecordResponse, error) {
 	result, err := h.Db.Collection("medical_records").DeleteOne(ctx, bson.M{"id": req.Id})
 	if err != nil {
@@ -137,7 +126,6 @@ func (h *Health) DeleteMedicalRecord(ctx context.Context, req *pb.DeleteMedicalR
 	return &pb.DeleteMedicalRecordResponse{Success: true}, nil
 }
 
-// ListMedicalRecords bir foydalanuvchiga tegishli barcha tibbiy yozuvlarni olish funksiyasi
 func (h *Health) ListMedicalRecords(ctx context.Context, req *pb.ListMedicalRecordsRequest) (*pb.ListMedicalRecordsResponse, error) {
 	cursor, err := h.Db.Collection("medical_records").Find(ctx, bson.M{"user_id": req.UserId}, options.Find())
 	if err != nil {

@@ -1,2 +1,4 @@
 time=2024-08-11T13:51:43.165+05:00 level=WARN msg="Medical record not found" record_id=12345
 time=2024-08-11T13:51:43.166+05:00 level=ERROR msg="GetMedicalRecord service da xatolik: tibbiy yozuv topilmadi"
+time=2024-08-11T14:51:11.951+05:00 level=WARN msg="Medical record not found for update" record_id=""
+time=2024-08-11T14:51:11.951+05:00 level=ERROR msg="UpdateMedicalRecord service xatolik: tibbiy yozuv topilmadi"
