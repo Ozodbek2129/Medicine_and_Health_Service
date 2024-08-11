@@ -235,3 +235,85 @@ func (h *Health) DeleteLifestyleData(ctx context.Context, req *pb.DeleteLifestyl
 
 	return &pb.DeleteLifestyleDataResponse{Success: true}, nil
 }
+
+// AddWearableData yangi kiyiladigan qurilma ma'lumotlarini qo'shish uchun
+func (h *Health) AddWearableData(ctx context.Context, req *pb.AddWearableDataRequest) (*pb.AddWearableDataResponse, error) {
+	wearableData := &pb.WearableData{
+		Id:                uuid.NewString(),
+		UserId:            req.UserId,
+		DeviceType:        req.DeviceType,
+		DataType:          req.DataType,
+		DataValue:         req.DataValue,
+		RecordedTimestamp: req.RecordedTimestamp,
+		CreatedAt:         time.Now().Format(time.RFC3339),
+		UpdatedAt:         time.Now().Format(time.RFC3339),
+	}
+
+	_, err := h.Db.Collection("wearable_data").InsertOne(ctx, wearableData)
+	if err != nil {
+		h.Logger.Error("Failed to add wearable data", "error", err)
+		return nil, err
+	}
+
+	return &pb.AddWearableDataResponse{WearableData: wearableData}, nil
+}
+
+// GetWearableData kiyiladigan qurilma ma'lumotlarini olish uchun
+func (h *Health) GetWearableData(ctx context.Context, req *pb.GetWearableDataRequest) (*pb.GetWearableDataResponse, error) {
+	var wearableData pb.WearableData
+
+	err := h.Db.Collection("wearable_data").FindOne(ctx, bson.M{"id": req.Id}).Decode(&wearableData)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			h.Logger.Warn("Wearable data not found", "id", req.Id)
+			return nil, errors.New("kiyiladigan qurilma ma'lumotlari topilmadi")
+		}
+		h.Logger.Error("Failed to get wearable data", "error", err)
+		return nil, err
+	}
+
+	return &pb.GetWearableDataResponse{WearableData: &wearableData}, nil
+}
+
+// UpdateWearableData kiyiladigan qurilma ma'lumotlarini yangilash uchun
+func (h *Health) UpdateWearableData(ctx context.Context, req *pb.UpdateWearableDataRequest) (*pb.UpdateWearableDataResponse, error) {
+	update := bson.M{
+		"$set": bson.M{
+			"user_id":            req.UserId,
+			"device_type":        req.DeviceType,
+			"data_type":          req.DataType,
+			"data_value":         req.DataValue,
+			"recorded_timestamp": req.RecordedTimestamp,
+			"updated_at":         time.Now().Format(time.RFC3339),
+		},
+	}
+
+	result, err := h.Db.Collection("wearable_data").UpdateOne(ctx, bson.M{"id": req.Id}, update)
+	if err != nil {
+		h.Logger.Error("Failed to update wearable data", "error", err)
+		return nil, err
+	}
+
+	if result.MatchedCount == 0 {
+		h.Logger.Warn("Wearable data not found for update", "id", req.Id)
+		return &pb.UpdateWearableDataResponse{Success: false}, errors.New("kiyiladigan qurilma ma'lumotlari topilmadi")
+	}
+
+	return &pb.UpdateWearableDataResponse{Success: true}, nil
+}
+
+// DeleteWearableData kiyiladigan qurilma ma'lumotlarini o'chirish uchun
+func (h *Health) DeleteWearableData(ctx context.Context, req *pb.DeleteWearableDataRequest) (*pb.DeleteWearableDataResponse, error) {
+	result, err := h.Db.Collection("wearable_data").DeleteOne(ctx, bson.M{"id": req.Id})
+	if err != nil {
+		h.Logger.Error("Failed to delete wearable data", "error", err)
+		return nil, err
+	}
+
+	if result.DeletedCount == 0 {
+		h.Logger.Warn("Wearable data not found for deletion", "id", req.Id)
+		return &pb.DeleteWearableDataResponse{Success: false}, errors.New("kiyiladigan qurilma ma'lumotlari topilmadi")
+	}
+
+	return &pb.DeleteWearableDataResponse{Success: true}, nil
+}

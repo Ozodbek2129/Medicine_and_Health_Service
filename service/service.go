@@ -102,3 +102,39 @@ func (s *HealthService) DeleteLifestyleData(ctx context.Context,req *pb.DeleteLi
 	}
 	return resp,nil
 }
+
+func (s *HealthService) AddWearableData(ctx context.Context,req *pb.AddWearableDataRequest)(*pb.AddWearableDataResponse,error){
+	resp,err:=s.health.AddWearableData(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("AddWearableData service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
+func (s *HealthService) GetWearableData(ctx context.Context,req *pb.GetWearableDataRequest)(*pb.GetWearableDataResponse,error){
+	resp,err:=s.health.GetWearableData(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("GetWearableData service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
+func (s *HealthService) UpdateWearableData(ctx context.Context,req *pb.UpdateWearableDataRequest)(*pb.UpdateWearableDataResponse,error){
+	resp,err:=s.health.UpdateWearableData(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("UpdateWearableData service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
+func (s *HealthService) DeleteWearableData(ctx context.Context,req *pb.DeleteWearableDataRequest)(*pb.DeleteWearableDataResponse,error){
+	resp,err:=s.health.DeleteWearableData(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("DeleteWearableData service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
