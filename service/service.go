@@ -138,3 +138,39 @@ func (s *HealthService) DeleteWearableData(ctx context.Context,req *pb.DeleteWea
 	}
 	return resp,nil
 }
+
+func (s *HealthService) GenerateHealthRecommendations(ctx context.Context,req *pb.GenerateHealthRecommendationsRequest)(*pb.GenerateHealthRecommendationsResponse,error){
+	resp,err:=s.health.GenerateHealthRecommendations(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("GenerateHealthRecommendations service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
+func (s *HealthService) GetRealtimeHealthMonitoring(ctx context.Context,req *pb.GetRealtimeHealthMonitoringRequest)(*pb.GetRealtimeHealthMonitoringResponse,error){
+	resp,err:=s.health.GetRealtimeHealthMonitoring(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("GetRealtimeHealthMonitoring service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
+func (s *HealthService) GetDailyHealthSummary(ctx context.Context,req *pb.GetDailyHealthSummaryRequest)(*pb.GetDailyHealthSummaryResponse,error){
+	resp,err:=s.health.GetDailyHealthSummary(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("GetDailyHealthSummary service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
+func (s *HealthService) GetWeeklyHealthSummary(ctx context.Context,req *pb.GetWeeklyHealthSummaryRequest)(*pb.GetWeeklyHealthSummaryResponse,error){
+	resp,err:=s.health.GetWeeklyHealthSummary(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("GetWeeklyHealthSummary service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}

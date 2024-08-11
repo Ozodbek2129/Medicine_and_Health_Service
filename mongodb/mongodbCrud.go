@@ -3,11 +3,13 @@ package mongoDb
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
-	"github.com/google/uuid" 
 	logger "health/pkg"
 	"log/slog"
+
+	"github.com/google/uuid"
 
 	pb "health/genproto/health_analytics"
 
@@ -83,33 +85,32 @@ func (h *Health) GetMedicalRecord(ctx context.Context, req *pb.GetMedicalRecordR
 }
 
 func (h *Health) UpdateMedicalRecord(ctx context.Context, req *pb.UpdateMedicalRecordRequest) (*pb.UpdateMedicalRecordResponse, error) {
-    updatedAt := time.Now().Format(time.RFC3339)
+	updatedAt := time.Now().Format(time.RFC3339)
 
-    update := bson.M{
-        "$set": bson.M{
-            "record_type": req.RecordType,
-            "record_date": req.RecordDate,
-            "description": req.Description,
-            "doctor_id":   req.DoctorId,
-            "attachments": req.Attachments,
-            "updated_at":  updatedAt,
-        },
-    }
+	update := bson.M{
+		"$set": bson.M{
+			"record_type": req.RecordType,
+			"record_date": req.RecordDate,
+			"description": req.Description,
+			"doctor_id":   req.DoctorId,
+			"attachments": req.Attachments,
+			"updated_at":  updatedAt,
+		},
+	}
 
-    result, err := h.Db.Collection("medical_records").UpdateOne(ctx, bson.M{"id": req.Id}, update)
-    if err != nil {
-        h.Logger.Error("Failed to update medical record", "error", err)
-        return nil, err
-    }
+	result, err := h.Db.Collection("medical_records").UpdateOne(ctx, bson.M{"id": req.Id}, update)
+	if err != nil {
+		h.Logger.Error("Failed to update medical record", "error", err)
+		return nil, err
+	}
 
-    if result.MatchedCount == 0 {
-        h.Logger.Warn("Medical record not found for update", "record_id", req.Id)
-        return &pb.UpdateMedicalRecordResponse{Success: false}, errors.New("tibbiy yozuv topilmadi")
-    }
+	if result.MatchedCount == 0 {
+		h.Logger.Warn("Medical record not found for update", "record_id", req.Id)
+		return &pb.UpdateMedicalRecordResponse{Success: false}, errors.New("tibbiy yozuv topilmadi")
+	}
 
-    return &pb.UpdateMedicalRecordResponse{Success: true}, nil
+	return &pb.UpdateMedicalRecordResponse{Success: true}, nil
 }
-
 
 func (h *Health) DeleteMedicalRecord(ctx context.Context, req *pb.DeleteMedicalRecordRequest) (*pb.DeleteMedicalRecordResponse, error) {
 	result, err := h.Db.Collection("medical_records").DeleteOne(ctx, bson.M{"id": req.Id})
@@ -159,13 +160,13 @@ func (h *Health) ListMedicalRecords(ctx context.Context, req *pb.ListMedicalReco
 // AddLifestyleData yangi turmush tarzi ma'lumotlarini qo'shadi
 func (h *Health) AddLifestyleData(ctx context.Context, req *pb.AddLifestyleDataRequest) (*pb.AddLifestyleDataResponse, error) {
 	lifestyleData := &pb.LifestyleData{
-		Id:            uuid.NewString(),
-		UserId:        req.UserId,
-		DataType:      req.DataType,
-		DataValue:     req.DataValue,
-		RecordedDate:  req.RecordedDate,
-		CreatedAt:     time.Now().Format(time.RFC3339),
-		UpdatedAt:     time.Now().Format(time.RFC3339),
+		Id:           uuid.NewString(),
+		UserId:       req.UserId,
+		DataType:     req.DataType,
+		DataValue:    req.DataValue,
+		RecordedDate: req.RecordedDate,
+		CreatedAt:    time.Now().Format(time.RFC3339),
+		UpdatedAt:    time.Now().Format(time.RFC3339),
 	}
 
 	_, err := h.Db.Collection("lifestyle_data").InsertOne(ctx, lifestyleData)
@@ -279,12 +280,12 @@ func (h *Health) GetWearableData(ctx context.Context, req *pb.GetWearableDataReq
 func (h *Health) UpdateWearableData(ctx context.Context, req *pb.UpdateWearableDataRequest) (*pb.UpdateWearableDataResponse, error) {
 	update := bson.M{
 		"$set": bson.M{
-			"user_id":            req.UserId,
-			"device_type":        req.DeviceType,
-			"data_type":          req.DataType,
-			"data_value":         req.DataValue,
-			"recorded_timestamp": req.RecordedTimestamp,
-			"updated_at":         time.Now().Format(time.RFC3339),
+			"userid":            req.UserId,
+			"devicetype":        req.DeviceType,
+			"datatype":          req.DataType,
+			"datavalue":         req.DataValue,
+			"recordedtimestamp": req.RecordedTimestamp,
+			"updatedat":         time.Now().Format(time.RFC3339),
 		},
 	}
 
@@ -316,4 +317,110 @@ func (h *Health) DeleteWearableData(ctx context.Context, req *pb.DeleteWearableD
 	}
 
 	return &pb.DeleteWearableDataResponse{Success: true}, nil
+}
+
+func (h *Health) GenerateHealthRecommendations(ctx context.Context, req *pb.GenerateHealthRecommendationsRequest) (*pb.GenerateHealthRecommendationsResponse, error) {
+	coll := h.Db.Collection("health")
+
+	id := uuid.NewString()
+	date := time.Now().Format("2006/01/02")
+
+	_, err := coll.InsertOne(ctx, bson.M{
+		"id":                  id,
+		"user_id":             req.UserId,
+		"recommendation_type": req.RecommendationType,
+		"description":         req.Description,
+		"priority":            req.Priority,
+		"created_at":          date,
+		"updated_at":          date,
+		"deleted_at":          0,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	recod := pb.HealthRecommendation{
+		Id:                 id,
+		UserId:             req.UserId,
+		RecommendationType: req.RecommendationType,
+		Description:        req.Description,
+		Priority:           req.Priority,
+		CreatedAt:          date,
+		UpdatedAt:          date,
+	}
+
+	return &pb.GenerateHealthRecommendationsResponse{
+		Recommendations: &recod,
+	}, nil
+}
+
+func (h *Health) GetRealtimeHealthMonitoring(ctx context.Context, req *pb.GetRealtimeHealthMonitoringRequest) (*pb.GetRealtimeHealthMonitoringResponse, error) {
+	var user pb.GetRealtimeHealthMonitoringResponse
+	coll := h.Db.Collection("health")
+
+	err := coll.FindOne(ctx, bson.M{"$and": []bson.M{{"user_id": req.UserId}, {"deleted_at": 0}, {"created_at": time.Now().Format("2006/01/02")}}}).Decode(&user)
+	if err != nil {
+		return nil, fmt.Errorf("realtime health monitoring not found")
+	}
+
+	return &user, nil
+}
+
+func (h *Health) GetDailyHealthSummary(ctx context.Context, req *pb.GetDailyHealthSummaryRequest) (*pb.GetDailyHealthSummaryResponse, error) {
+	var summary pb.GetDailyHealthSummaryResponse
+	coll := h.Db.Collection("health")
+
+	err := coll.FindOne(ctx, bson.M{"$and": []bson.M{{"user_id": req.UserId}, {"deleted_at": 0}, {"created_at": req.Date}}}).Decode(&summary)
+	if err != nil {
+		return nil, err
+	}
+
+	return &summary, nil
+}
+
+func (h *Health) GetWeeklyHealthSummary(ctx context.Context, req *pb.GetWeeklyHealthSummaryRequest) (*pb.GetWeeklyHealthSummaryResponse, error) {
+	var summary pb.GetWeeklyHealthSummaryResponse
+	coll := h.Db.Collection("health")
+
+	startDateStr := req.StartDate 
+
+	startDate, err := time.Parse("2006/01/02", startDateStr)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing start date: %v", err)
+	}
+
+	weekAgo := startDate.AddDate(0, 0, -7)
+	weekAgoStr := weekAgo.Format("2006/01/02") 
+
+	cursor, err := coll.Find(ctx, bson.M{
+		"$and": []bson.M{
+			{"user_id": req.UserId},
+			{"deleted_at": 0},
+			{"created_at": bson.M{
+				"$gte": weekAgoStr,  
+				"$lte": startDateStr,
+			}},
+		},
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer cursor.Close(ctx)
+
+	for cursor.Next(ctx) {
+		var doc pb.HealthRecommendation
+		if err := cursor.Decode(&doc); err != nil {
+			return nil, fmt.Errorf("error decoding document: %v", err)
+		}
+		summary.Health = append(summary.Health, &doc)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, fmt.Errorf("cursor error: %v", err)
+	}
+
+	return &summary, nil
 }
