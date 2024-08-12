@@ -2,3 +2,19 @@ time=2024-08-11T13:51:43.165+05:00 level=WARN msg="Medical record not found" rec
 time=2024-08-11T13:51:43.166+05:00 level=ERROR msg="GetMedicalRecord service da xatolik: tibbiy yozuv topilmadi"
 time=2024-08-11T14:51:11.951+05:00 level=WARN msg="Medical record not found for update" record_id=""
 time=2024-08-11T14:51:11.951+05:00 level=ERROR msg="UpdateMedicalRecord service xatolik: tibbiy yozuv topilmadi"
+time=2024-08-12T09:35:35.699+05:00 level=ERROR msg="GetRealtimeHealthMonitoring service da xatolik: realtime health monitoring not found"
+time=2024-08-12T09:38:05.085+05:00 level=ERROR msg="GetRealtimeHealthMonitoring service da xatolik: realtime health monitoring not found"
+time=2024-08-12T11:05:05.069+05:00 level=WARN msg="Lifestyle data not found" id=0e304737-8544-49ba-b6c3-0baec531f5ac
+time=2024-08-12T11:05:05.070+05:00 level=ERROR msg="GetLifestyleData service da xatolik: turmush tarzi ma'lumotlari topilmadi"
+time=2024-08-12T11:22:11.080+05:00 level=WARN msg="Lifestyle data not found" id=f0c669d6-b7c1-4c36-aae5-4f2e527060a1
+time=2024-08-12T11:22:11.080+05:00 level=ERROR msg="GetLifestyleData service da xatolik: turmush tarzi ma'lumotlari topilmadi"
+time=2024-08-12T11:22:27.089+05:00 level=WARN msg="Lifestyle data not found for update" id=f0c669d6-b7c1-4c36-aae5-4f2e527060a1
+time=2024-08-12T11:22:27.089+05:00 level=ERROR msg="UpdateLifestyleData service da xatolik: turmush tarzi ma'lumotlari topilmadi"
+time=2024-08-12T11:22:58.182+05:00 level=WARN msg="Lifestyle data not found for update" id=9231b4d3-4bf4-47bb-8ffa-7ce27fe41663
+time=2024-08-12T11:22:58.182+05:00 level=ERROR msg="UpdateLifestyleData service da xatolik: turmush tarzi ma'lumotlari topilmadi"
+time=2024-08-12T11:28:24.349+05:00 level=WARN msg="Medical record not found" record_id=6092bb3f-ecbb-489b-ab65-a90b155f7529
+time=2024-08-12T11:28:24.349+05:00 level=ERROR msg="GetMedicalRecord service da xatolik: tibbiy yozuv topilmadi"
+time=2024-08-12T11:52:40.065+05:00 level=WARN msg="Wearable data not found" id=da8aaf2f-5b3d-421a-ad45-dbf1c28dc8b3
+time=2024-08-12T11:52:40.066+05:00 level=ERROR msg="GetWearableData service da xatolik: kiyiladigan qurilma ma'lumotlari topilmadi"
+time=2024-08-12T11:52:50.124+05:00 level=WARN msg="Wearable data not found for update" id=da8aaf2f-5b3d-421a-ad45-dbf1c28dc8b3
+time=2024-08-12T11:52:50.124+05:00 level=ERROR msg="UpdateWearableData service da xatolik: kiyiladigan qurilma ma'lumotlari topilmadi"
