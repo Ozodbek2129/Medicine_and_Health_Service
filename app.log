@@ -18,3 +18,7 @@ time=2024-08-12T11:52:40.065+05:00 level=WARN msg="Wearable data not found" id=d
 time=2024-08-12T11:52:40.066+05:00 level=ERROR msg="GetWearableData service da xatolik: kiyiladigan qurilma ma'lumotlari topilmadi"
 time=2024-08-12T11:52:50.124+05:00 level=WARN msg="Wearable data not found for update" id=da8aaf2f-5b3d-421a-ad45-dbf1c28dc8b3
 time=2024-08-12T11:52:50.124+05:00 level=ERROR msg="UpdateWearableData service da xatolik: kiyiladigan qurilma ma'lumotlari topilmadi"
+time=2024-08-12T21:16:27.034+05:00 level=WARN msg="Wearable data not found" id=95a4dd69-477a-46db-bffd-cf5d580fd3f0
+time=2024-08-12T21:16:27.037+05:00 level=ERROR msg="GetWearableData service da xatolik: kiyiladigan qurilma ma'lumotlari topilmadi"
+time=2024-08-12T21:17:05.295+05:00 level=WARN msg="Wearable data not found for update" id=95a4dd69-477a-46db-bffd-cf5d580fd3f0
+time=2024-08-12T21:17:05.296+05:00 level=ERROR msg="UpdateWearableData service da xatolik: kiyiladigan qurilma ma'lumotlari topilmadi"
