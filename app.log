@@ -22,3 +22,9 @@ time=2024-08-12T21:16:27.034+05:00 level=WARN msg="Wearable data not found" id=9
 time=2024-08-12T21:16:27.037+05:00 level=ERROR msg="GetWearableData service da xatolik: kiyiladigan qurilma ma'lumotlari topilmadi"
 time=2024-08-12T21:17:05.295+05:00 level=WARN msg="Wearable data not found for update" id=95a4dd69-477a-46db-bffd-cf5d580fd3f0
 time=2024-08-12T21:17:05.296+05:00 level=ERROR msg="UpdateWearableData service da xatolik: kiyiladigan qurilma ma'lumotlari topilmadi"
+time=2024-08-13T00:54:27.072+05:00 level=ERROR msg="Bunday id yoki deleted_at '0' bo'lgan hujjat topilmadi"
+time=2024-08-13T00:54:27.074+05:00 level=ERROR msg="GenerateHealthRecommendationsId service da xatolik: NotFound%!(EXTRA string=Bunday id yoki deleted_at '0' bo'lgan hujjat topilmadi)"
+time=2024-08-13T00:54:53.218+05:00 level=ERROR msg="Bunday id yoki deleted_at '0' bo'lgan hujjat topilmadi"
+time=2024-08-13T00:54:53.218+05:00 level=ERROR msg="GenerateHealthRecommendationsId service da xatolik: NotFound%!(EXTRA string=Bunday id yoki deleted_at '0' bo'lgan hujjat topilmadi)"
+time=2024-08-13T00:57:07.933+05:00 level=ERROR msg="Bunday id yoki deleted_at '0' bo'lgan hujjat topilmadi"
+time=2024-08-13T00:57:07.933+05:00 level=ERROR msg="GenerateHealthRecommendationsId service da xatolik: NotFound%!(EXTRA string=Bunday id yoki deleted_at '0' bo'lgan hujjat topilmadi)"

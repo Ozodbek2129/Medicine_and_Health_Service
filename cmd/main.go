@@ -9,11 +9,12 @@ import (
 	"log"
 	"net"
 
+	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	listener,err:=net.Listen("tcp",config.Load().HEALTH_SERVICE)
+	listener, err := net.Listen("tcp", config.Load().HEALTH_SERVICE)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,14 +30,20 @@ func main() {
 		}
 	}()
 
-	mongoDbRepo := mongoDb.NewHealth(mongodb)
-	HelathService:=service.NewHealthService(mongoDbRepo)
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379", // Redis serverining manzili
+		Password: "",               // Parol agar mavjud bo'lsa
+		DB:       0,                // Default DB ni ishlatish
+	})
 
-	server:=grpc.NewServer()
-	pb.RegisterHealthAnalyticsServiceServer(server,HelathService)
+	mongoDbRepo := mongoDb.NewHealth(mongodb,rdb)
+	HelathService := service.NewHealthService(mongoDbRepo)
+
+	server := grpc.NewServer()
+	pb.RegisterHealthAnalyticsServiceServer(server, HelathService)
 
 	log.Printf("Server is listening on port %s\n", config.Load().HEALTH_SERVICE)
 	if err = server.Serve(listener); err != nil {
 		log.Fatal(err)
-	}	
+	}
 }

@@ -2,6 +2,7 @@ package mongoDb
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -10,9 +11,11 @@ import (
 	"log/slog"
 
 	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
 
 	pb "health/genproto/health_analytics"
 
+	"github.com/redis/go-redis/v9"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -21,12 +24,14 @@ import (
 type Health struct {
 	Logger *slog.Logger
 	Db     *mongo.Database
+	Redis  *redis.Client
 }
 
-func NewHealth(mdb *mongo.Database) *Health {
+func NewHealth(mdb *mongo.Database,rdb *redis.Client) *Health {
 	return &Health{
 		Logger: logger.NewLogger(),
 		Db:     mdb,
+		Redis: rdb,
 	}
 }
 
@@ -99,7 +104,7 @@ func (h *Health) UpdateMedicalRecord(ctx context.Context, req *pb.UpdateMedicalR
 		},
 	}
 
-	result, err := h.Db.Collection("medical_records").UpdateOne(ctx, bson.M{"$and":[]bson.M{{"id": req.Id},{"deleted_at": "0"}}}, update)
+	result, err := h.Db.Collection("medical_records").UpdateOne(ctx, bson.M{"$and": []bson.M{{"id": req.Id}, {"deleted_at": "0"}}}, update)
 	if err != nil {
 		h.Logger.Error("Failed to update medical record", "error", err)
 		return nil, err
@@ -134,9 +139,8 @@ func (h *Health) DeleteMedicalRecord(ctx context.Context, req *pb.DeleteMedicalR
 	return &pb.DeleteMedicalRecordResponse{Success: true}, nil
 }
 
-
 func (h *Health) ListMedicalRecords(ctx context.Context, req *pb.ListMedicalRecordsRequest) (*pb.ListMedicalRecordsResponse, error) {
-	cursor, err := h.Db.Collection("medical_records").Find(ctx, bson.M{"$and":[]bson.M{{"user_id": req.UserId},{"deleted_at": "0"}}}, options.Find())
+	cursor, err := h.Db.Collection("medical_records").Find(ctx, bson.M{"$and": []bson.M{{"user_id": req.UserId}, {"deleted_at": "0"}}}, options.Find())
 	if err != nil {
 		h.Logger.Error("Failed to list medical records", "error", err)
 		return nil, err
@@ -240,7 +244,7 @@ func (h *Health) GetAllLifestyleData(ctx context.Context, req *pb.GetAllLifestyl
 func (h *Health) GetLifestyleData(ctx context.Context, req *pb.GetLifestyleDataRequest) (*pb.GetLifestyleDataResponse, error) {
 	var lifestyleData pb.LifestyleData
 
-	err := h.Db.Collection("lifestyle_data").FindOne(ctx, bson.M{"$and":[]bson.M{{"id": req.Id},{"deletedat": "0"}}}).Decode(&lifestyleData)
+	err := h.Db.Collection("lifestyle_data").FindOne(ctx, bson.M{"$and": []bson.M{{"id": req.Id}, {"deletedat": "0"}}}).Decode(&lifestyleData)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			h.Logger.Warn("Lifestyle data not found", "id", req.Id)
@@ -265,7 +269,7 @@ func (h *Health) UpdateLifestyleData(ctx context.Context, req *pb.UpdateLifestyl
 		},
 	}
 
-	result, err := h.Db.Collection("lifestyle_data").UpdateOne(ctx, bson.M{"$and":[]bson.M{{"id": req.Id},{"deletedat": "0"}}}, update)
+	result, err := h.Db.Collection("lifestyle_data").UpdateOne(ctx, bson.M{"$and": []bson.M{{"id": req.Id}, {"deletedat": "0"}}}, update)
 	if err != nil {
 		h.Logger.Error("Failed to update lifestyle data", "error", err)
 		return nil, err
@@ -303,7 +307,6 @@ func (h *Health) DeleteLifestyleData(ctx context.Context, req *pb.DeleteLifestyl
 
 	return &pb.DeleteLifestyleDataResponse{Success: true}, nil
 }
-
 
 // AddWearableData yangi kiyiladigan qurilma ma'lumotlarini qo'shish uchun
 func (h *Health) AddWearableData(ctx context.Context, req *pb.AddWearableDataRequest) (*pb.AddWearableDataResponse, error) {
@@ -382,7 +385,7 @@ func (h *Health) GetAllWearableData(ctx context.Context, req *pb.GetAllWearableD
 func (h *Health) GetWearableData(ctx context.Context, req *pb.GetWearableDataRequest) (*pb.GetWearableDataResponse, error) {
 	var wearableData pb.WearableData
 
-	err := h.Db.Collection("wearable_data").FindOne(ctx, bson.M{"$and":[]bson.M{{"id": req.Id},{"deletedat":"0"}}}).Decode(&wearableData)
+	err := h.Db.Collection("wearable_data").FindOne(ctx, bson.M{"$and": []bson.M{{"id": req.Id}, {"deletedat": "0"}}}).Decode(&wearableData)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			h.Logger.Warn("Wearable data not found", "id", req.Id)
@@ -408,7 +411,7 @@ func (h *Health) UpdateWearableData(ctx context.Context, req *pb.UpdateWearableD
 		},
 	}
 
-	result, err := h.Db.Collection("wearable_data").UpdateOne(ctx, bson.M{"$and":[]bson.M{{"id": req.Id},{"deletedat":"0"}}}, update)
+	result, err := h.Db.Collection("wearable_data").UpdateOne(ctx, bson.M{"$and": []bson.M{{"id": req.Id}, {"deletedat": "0"}}}, update)
 	if err != nil {
 		h.Logger.Error("Failed to update wearable data", "error", err)
 		return nil, err
@@ -447,7 +450,6 @@ func (h *Health) DeleteWearableData(ctx context.Context, req *pb.DeleteWearableD
 	return &pb.DeleteWearableDataResponse{Success: true}, nil
 }
 
-
 func (h *Health) GenerateHealthRecommendations(ctx context.Context, req *pb.GenerateHealthRecommendationsRequest) (*pb.GenerateHealthRecommendationsResponse, error) {
 	coll := h.Db.Collection("health")
 
@@ -479,22 +481,84 @@ func (h *Health) GenerateHealthRecommendations(ctx context.Context, req *pb.Gene
 		UpdatedAt:          date,
 	}
 
+	// Redisga yozish
+	redisKey := req.UserId
+	redisValue, err := json.Marshal(recod)
+	if err != nil {
+		return nil, err
+	}
+
+	err = h.Redis.Set(ctx, redisKey, redisValue, 0).Err()
+	if err != nil {
+		return nil, err
+	}
+
 	return &pb.GenerateHealthRecommendationsResponse{
 		Recommendations: &recod,
 	}, nil
 }
 
-func (h *Health) GetRealtimeHealthMonitoring(ctx context.Context, req *pb.GetRealtimeHealthMonitoringRequest) (*pb.GetRealtimeHealthMonitoringResponse, error) {
-	var user pb.GetRealtimeHealthMonitoringResponse
-	coll := h.Db.Collection("health")
+func (h *Health) GenerateHealthRecommendationsId(ctx context.Context, req *pb.GenerateHealthRecommendationsIdRequest) (*pb.GenerateHealthRecommendationsIdResponse, error) {
+	collection := h.Db.Collection("health")
 
-	err := coll.FindOne(ctx, bson.M{"$and": []bson.M{{"user_id": req.UserId}, {"deleted_at": "0"}, {"created_at": time.Now().Format("2006/01/02")}}}).Decode(&user)
+	filter := bson.M{"id": req.Id, "deleted_at": "0"}
+
+	var recommendation pb.HealthRecommendation
+
+	err := collection.FindOne(ctx, filter).Decode(&recommendation)
 	if err != nil {
-		return nil, fmt.Errorf("realtime health monitoring not found")
+		if err == mongo.ErrNoDocuments {
+			h.Logger.Error("Bunday id yoki deleted_at '0' bo'lgan hujjat topilmadi")
+			return nil, fmt.Errorf(codes.NotFound.String(), "Bunday id yoki deleted_at '0' bo'lgan hujjat topilmadi")
+		}
+		h.Logger.Error("MongoDB dan hujjat olishda xatolik", "error", err)
+		return nil, fmt.Errorf(codes.Internal.String(), "Hujjatni olishda xatolik: %v", err)
 	}
 
-	return &user, nil
+	response := &pb.GenerateHealthRecommendationsIdResponse{
+		Recommendations: &recommendation,
+	}
+
+	return response, nil
 }
+
+func (h *Health) GetRealtimeHealthMonitoring(ctx context.Context, req *pb.GetRealtimeHealthMonitoringRequest) (*pb.GetRealtimeHealthMonitoringResponse, error) {
+	var user pb.HealthRecommendation
+
+	redisKey := req.UserId
+
+	val, err := h.Redis.Get(ctx, redisKey).Result()
+	if err == redis.Nil {
+		// Redisda ma'lumot topilmadi
+		return nil, fmt.Errorf("realtime health monitoring not found")
+	} else if err != nil {
+		// Redis bilan bog'liq xatolik
+		return nil, err
+	}
+
+	// Redisdan olingan JSON ma'lumotni decoding qilish
+	err = json.Unmarshal([]byte(val), &user)
+	if err != nil {
+		return nil, err
+	}
+
+	// Bugungi sana
+	date := time.Now().Format("2006/01/02")
+
+	// Redisdan olingan ma'lumotdagi `CreatedAt` maydoni bilan bugungi sanani solishtirish
+	if user.CreatedAt != date {
+		return nil, fmt.Errorf("no health data found for today's date")
+	}
+
+	resp:=pb.GetRealtimeHealthMonitoringResponse{
+		RecommendationType: user.RecommendationType,
+		Description: user.Description,
+		Priority: user.Priority,
+	}
+
+	return &resp, nil
+}
+
 
 func (h *Health) GetDailyHealthSummary(ctx context.Context, req *pb.GetDailyHealthSummaryRequest) (*pb.GetDailyHealthSummaryResponse, error) {
 	var summary pb.GetDailyHealthSummaryResponse

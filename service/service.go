@@ -166,6 +166,15 @@ func (s *HealthService) GenerateHealthRecommendations(ctx context.Context,req *p
 	return resp,nil
 }
 
+func (s *HealthService) GenerateHealthRecommendationsId(ctx context.Context,req *pb.GenerateHealthRecommendationsIdRequest)(*pb.GenerateHealthRecommendationsIdResponse,error){
+	resp,err:=s.health.GenerateHealthRecommendationsId(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("GenerateHealthRecommendationsId service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
 func (s *HealthService) GetRealtimeHealthMonitoring(ctx context.Context,req *pb.GetRealtimeHealthMonitoringRequest)(*pb.GetRealtimeHealthMonitoringResponse,error){
 	resp,err:=s.health.GetRealtimeHealthMonitoring(ctx,req)
 	if err!=nil{

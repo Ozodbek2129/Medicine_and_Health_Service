@@ -19,25 +19,26 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	HealthAnalyticsService_AddMedicalRecord_FullMethodName              = "/healthanalytics.HealthAnalyticsService/AddMedicalRecord"
-	HealthAnalyticsService_GetMedicalRecord_FullMethodName              = "/healthanalytics.HealthAnalyticsService/GetMedicalRecord"
-	HealthAnalyticsService_UpdateMedicalRecord_FullMethodName           = "/healthanalytics.HealthAnalyticsService/UpdateMedicalRecord"
-	HealthAnalyticsService_DeleteMedicalRecord_FullMethodName           = "/healthanalytics.HealthAnalyticsService/DeleteMedicalRecord"
-	HealthAnalyticsService_ListMedicalRecords_FullMethodName            = "/healthanalytics.HealthAnalyticsService/ListMedicalRecords"
-	HealthAnalyticsService_AddLifestyleData_FullMethodName              = "/healthanalytics.HealthAnalyticsService/AddLifestyleData"
-	HealthAnalyticsService_GetLifestyleData_FullMethodName              = "/healthanalytics.HealthAnalyticsService/GetLifestyleData"
-	HealthAnalyticsService_GetAllLifestyleData_FullMethodName           = "/healthanalytics.HealthAnalyticsService/GetAllLifestyleData"
-	HealthAnalyticsService_UpdateLifestyleData_FullMethodName           = "/healthanalytics.HealthAnalyticsService/UpdateLifestyleData"
-	HealthAnalyticsService_DeleteLifestyleData_FullMethodName           = "/healthanalytics.HealthAnalyticsService/DeleteLifestyleData"
-	HealthAnalyticsService_AddWearableData_FullMethodName               = "/healthanalytics.HealthAnalyticsService/AddWearableData"
-	HealthAnalyticsService_GetWearableData_FullMethodName               = "/healthanalytics.HealthAnalyticsService/GetWearableData"
-	HealthAnalyticsService_GetAllWearableData_FullMethodName            = "/healthanalytics.HealthAnalyticsService/GetAllWearableData"
-	HealthAnalyticsService_UpdateWearableData_FullMethodName            = "/healthanalytics.HealthAnalyticsService/UpdateWearableData"
-	HealthAnalyticsService_DeleteWearableData_FullMethodName            = "/healthanalytics.HealthAnalyticsService/DeleteWearableData"
-	HealthAnalyticsService_GenerateHealthRecommendations_FullMethodName = "/healthanalytics.HealthAnalyticsService/GenerateHealthRecommendations"
-	HealthAnalyticsService_GetRealtimeHealthMonitoring_FullMethodName   = "/healthanalytics.HealthAnalyticsService/GetRealtimeHealthMonitoring"
-	HealthAnalyticsService_GetDailyHealthSummary_FullMethodName         = "/healthanalytics.HealthAnalyticsService/GetDailyHealthSummary"
-	HealthAnalyticsService_GetWeeklyHealthSummary_FullMethodName        = "/healthanalytics.HealthAnalyticsService/GetWeeklyHealthSummary"
+	HealthAnalyticsService_AddMedicalRecord_FullMethodName                = "/healthanalytics.HealthAnalyticsService/AddMedicalRecord"
+	HealthAnalyticsService_GetMedicalRecord_FullMethodName                = "/healthanalytics.HealthAnalyticsService/GetMedicalRecord"
+	HealthAnalyticsService_UpdateMedicalRecord_FullMethodName             = "/healthanalytics.HealthAnalyticsService/UpdateMedicalRecord"
+	HealthAnalyticsService_DeleteMedicalRecord_FullMethodName             = "/healthanalytics.HealthAnalyticsService/DeleteMedicalRecord"
+	HealthAnalyticsService_ListMedicalRecords_FullMethodName              = "/healthanalytics.HealthAnalyticsService/ListMedicalRecords"
+	HealthAnalyticsService_AddLifestyleData_FullMethodName                = "/healthanalytics.HealthAnalyticsService/AddLifestyleData"
+	HealthAnalyticsService_GetLifestyleData_FullMethodName                = "/healthanalytics.HealthAnalyticsService/GetLifestyleData"
+	HealthAnalyticsService_GetAllLifestyleData_FullMethodName             = "/healthanalytics.HealthAnalyticsService/GetAllLifestyleData"
+	HealthAnalyticsService_UpdateLifestyleData_FullMethodName             = "/healthanalytics.HealthAnalyticsService/UpdateLifestyleData"
+	HealthAnalyticsService_DeleteLifestyleData_FullMethodName             = "/healthanalytics.HealthAnalyticsService/DeleteLifestyleData"
+	HealthAnalyticsService_AddWearableData_FullMethodName                 = "/healthanalytics.HealthAnalyticsService/AddWearableData"
+	HealthAnalyticsService_GetWearableData_FullMethodName                 = "/healthanalytics.HealthAnalyticsService/GetWearableData"
+	HealthAnalyticsService_GetAllWearableData_FullMethodName              = "/healthanalytics.HealthAnalyticsService/GetAllWearableData"
+	HealthAnalyticsService_UpdateWearableData_FullMethodName              = "/healthanalytics.HealthAnalyticsService/UpdateWearableData"
+	HealthAnalyticsService_DeleteWearableData_FullMethodName              = "/healthanalytics.HealthAnalyticsService/DeleteWearableData"
+	HealthAnalyticsService_GenerateHealthRecommendations_FullMethodName   = "/healthanalytics.HealthAnalyticsService/GenerateHealthRecommendations"
+	HealthAnalyticsService_GenerateHealthRecommendationsId_FullMethodName = "/healthanalytics.HealthAnalyticsService/GenerateHealthRecommendationsId"
+	HealthAnalyticsService_GetRealtimeHealthMonitoring_FullMethodName     = "/healthanalytics.HealthAnalyticsService/GetRealtimeHealthMonitoring"
+	HealthAnalyticsService_GetDailyHealthSummary_FullMethodName           = "/healthanalytics.HealthAnalyticsService/GetDailyHealthSummary"
+	HealthAnalyticsService_GetWeeklyHealthSummary_FullMethodName          = "/healthanalytics.HealthAnalyticsService/GetWeeklyHealthSummary"
 )
 
 // HealthAnalyticsServiceClient is the client API for HealthAnalyticsService service.
@@ -66,6 +67,7 @@ type HealthAnalyticsServiceClient interface {
 	DeleteWearableData(ctx context.Context, in *DeleteWearableDataRequest, opts ...grpc.CallOption) (*DeleteWearableDataResponse, error)
 	// Sog'liq tavsiyalari va monitoringi uchun RPC lar
 	GenerateHealthRecommendations(ctx context.Context, in *GenerateHealthRecommendationsRequest, opts ...grpc.CallOption) (*GenerateHealthRecommendationsResponse, error)
+	GenerateHealthRecommendationsId(ctx context.Context, in *GenerateHealthRecommendationsIdRequest, opts ...grpc.CallOption) (*GenerateHealthRecommendationsIdResponse, error)
 	GetRealtimeHealthMonitoring(ctx context.Context, in *GetRealtimeHealthMonitoringRequest, opts ...grpc.CallOption) (*GetRealtimeHealthMonitoringResponse, error)
 	GetDailyHealthSummary(ctx context.Context, in *GetDailyHealthSummaryRequest, opts ...grpc.CallOption) (*GetDailyHealthSummaryResponse, error)
 	GetWeeklyHealthSummary(ctx context.Context, in *GetWeeklyHealthSummaryRequest, opts ...grpc.CallOption) (*GetWeeklyHealthSummaryResponse, error)
@@ -239,6 +241,16 @@ func (c *healthAnalyticsServiceClient) GenerateHealthRecommendations(ctx context
 	return out, nil
 }
 
+func (c *healthAnalyticsServiceClient) GenerateHealthRecommendationsId(ctx context.Context, in *GenerateHealthRecommendationsIdRequest, opts ...grpc.CallOption) (*GenerateHealthRecommendationsIdResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenerateHealthRecommendationsIdResponse)
+	err := c.cc.Invoke(ctx, HealthAnalyticsService_GenerateHealthRecommendationsId_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *healthAnalyticsServiceClient) GetRealtimeHealthMonitoring(ctx context.Context, in *GetRealtimeHealthMonitoringRequest, opts ...grpc.CallOption) (*GetRealtimeHealthMonitoringResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetRealtimeHealthMonitoringResponse)
@@ -295,6 +307,7 @@ type HealthAnalyticsServiceServer interface {
 	DeleteWearableData(context.Context, *DeleteWearableDataRequest) (*DeleteWearableDataResponse, error)
 	// Sog'liq tavsiyalari va monitoringi uchun RPC lar
 	GenerateHealthRecommendations(context.Context, *GenerateHealthRecommendationsRequest) (*GenerateHealthRecommendationsResponse, error)
+	GenerateHealthRecommendationsId(context.Context, *GenerateHealthRecommendationsIdRequest) (*GenerateHealthRecommendationsIdResponse, error)
 	GetRealtimeHealthMonitoring(context.Context, *GetRealtimeHealthMonitoringRequest) (*GetRealtimeHealthMonitoringResponse, error)
 	GetDailyHealthSummary(context.Context, *GetDailyHealthSummaryRequest) (*GetDailyHealthSummaryResponse, error)
 	GetWeeklyHealthSummary(context.Context, *GetWeeklyHealthSummaryRequest) (*GetWeeklyHealthSummaryResponse, error)
@@ -352,6 +365,9 @@ func (UnimplementedHealthAnalyticsServiceServer) DeleteWearableData(context.Cont
 }
 func (UnimplementedHealthAnalyticsServiceServer) GenerateHealthRecommendations(context.Context, *GenerateHealthRecommendationsRequest) (*GenerateHealthRecommendationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateHealthRecommendations not implemented")
+}
+func (UnimplementedHealthAnalyticsServiceServer) GenerateHealthRecommendationsId(context.Context, *GenerateHealthRecommendationsIdRequest) (*GenerateHealthRecommendationsIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateHealthRecommendationsId not implemented")
 }
 func (UnimplementedHealthAnalyticsServiceServer) GetRealtimeHealthMonitoring(context.Context, *GetRealtimeHealthMonitoringRequest) (*GetRealtimeHealthMonitoringResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRealtimeHealthMonitoring not implemented")
@@ -664,6 +680,24 @@ func _HealthAnalyticsService_GenerateHealthRecommendations_Handler(srv interface
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HealthAnalyticsService_GenerateHealthRecommendationsId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenerateHealthRecommendationsIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HealthAnalyticsServiceServer).GenerateHealthRecommendationsId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HealthAnalyticsService_GenerateHealthRecommendationsId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HealthAnalyticsServiceServer).GenerateHealthRecommendationsId(ctx, req.(*GenerateHealthRecommendationsIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _HealthAnalyticsService_GetRealtimeHealthMonitoring_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRealtimeHealthMonitoringRequest)
 	if err := dec(in); err != nil {
@@ -788,6 +822,10 @@ var HealthAnalyticsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GenerateHealthRecommendations",
 			Handler:    _HealthAnalyticsService_GenerateHealthRecommendations_Handler,
+		},
+		{
+			MethodName: "GenerateHealthRecommendationsId",
+			Handler:    _HealthAnalyticsService_GenerateHealthRecommendationsId_Handler,
 		},
 		{
 			MethodName: "GetRealtimeHealthMonitoring",
