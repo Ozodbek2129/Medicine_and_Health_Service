@@ -199,6 +199,43 @@ func (h *Health) AddLifestyleData(ctx context.Context, req *pb.AddLifestyleDataR
 	}}, nil
 }
 
+// GetAllLifestyleData metodi
+func (h *Health) GetAllLifestyleData(ctx context.Context, req *pb.GetAllLifestyleDataRequest) (*pb.GetAllLifestyleDataResponse, error) {
+	collection := h.Db.Collection("lifestyle_data")
+
+	skip := (req.Page - 1) * req.Limit
+
+	findOptions := options.Find()
+	findOptions.SetLimit(req.GetLimit())
+	findOptions.SetSkip(skip)
+
+	cursor, err := collection.Find(ctx, bson.M{}, findOptions)
+	if err != nil {
+		h.Logger.Error("Error finding lifestyle data", "error", err)
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var lifestyleDataList []*pb.LifestyleData
+	for cursor.Next(ctx) {
+		var data pb.LifestyleData
+		if err := cursor.Decode(&data); err != nil {
+			h.Logger.Error("Error decoding lifestyle data", "error", err)
+			return nil, err
+		}
+		lifestyleDataList = append(lifestyleDataList, &data)
+	}
+
+	if err := cursor.Err(); err != nil {
+		h.Logger.Error("Cursor error", "error", err)
+		return nil, err
+	}
+
+	return &pb.GetAllLifestyleDataResponse{
+		Lifestyledata: lifestyleDataList,
+	}, nil
+}
+
 // GetLifestyleData turmush tarzi ma'lumotlarini olish uchun
 func (h *Health) GetLifestyleData(ctx context.Context, req *pb.GetLifestyleDataRequest) (*pb.GetLifestyleDataResponse, error) {
 	var lifestyleData pb.LifestyleData
@@ -302,6 +339,43 @@ func (h *Health) AddWearableData(ctx context.Context, req *pb.AddWearableDataReq
 		CreatedAt:         vaqt,
 		UpdatedAt:         vaqt,
 	}}, nil
+}
+
+// GetAllWearableData metodi
+func (h *Health) GetAllWearableData(ctx context.Context, req *pb.GetAllWearableDataRequest) (*pb.GetAllWearableDataResponse, error) {
+	collection := h.Db.Collection("wearable_data")
+
+	skip := (req.GetPage() - 1) * req.GetLimit()
+
+	findOptions := options.Find()
+	findOptions.SetLimit(req.GetLimit())
+	findOptions.SetSkip(skip)
+
+	cursor, err := collection.Find(ctx, bson.M{}, findOptions)
+	if err != nil {
+		h.Logger.Error("Error finding wearable data", "error", err)
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var wearableDataList []*pb.WearableData
+	for cursor.Next(ctx) {
+		var data pb.WearableData
+		if err := cursor.Decode(&data); err != nil {
+			h.Logger.Error("Error decoding wearable data", "error", err)
+			return nil, err
+		}
+		wearableDataList = append(wearableDataList, &data)
+	}
+
+	if err := cursor.Err(); err != nil {
+		h.Logger.Error("Cursor error", "error", err)
+		return nil, err
+	}
+
+	return &pb.GetAllWearableDataResponse{
+		Wearabledata: wearableDataList,
+	}, nil
 }
 
 // GetWearableData kiyiladigan qurilma ma'lumotlarini olish uchun

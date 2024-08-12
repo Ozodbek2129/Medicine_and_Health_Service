@@ -24,16 +24,14 @@ const (
 	HealthAnalyticsService_UpdateMedicalRecord_FullMethodName           = "/healthanalytics.HealthAnalyticsService/UpdateMedicalRecord"
 	HealthAnalyticsService_DeleteMedicalRecord_FullMethodName           = "/healthanalytics.HealthAnalyticsService/DeleteMedicalRecord"
 	HealthAnalyticsService_ListMedicalRecords_FullMethodName            = "/healthanalytics.HealthAnalyticsService/ListMedicalRecords"
-	HealthAnalyticsService_AddGeneticData_FullMethodName                = "/healthanalytics.HealthAnalyticsService/AddGeneticData"
-	HealthAnalyticsService_GetGeneticData_FullMethodName                = "/healthanalytics.HealthAnalyticsService/GetGeneticData"
-	HealthAnalyticsService_UpdateGeneticData_FullMethodName             = "/healthanalytics.HealthAnalyticsService/UpdateGeneticData"
-	HealthAnalyticsService_DeleteGeneticData_FullMethodName             = "/healthanalytics.HealthAnalyticsService/DeleteGeneticData"
 	HealthAnalyticsService_AddLifestyleData_FullMethodName              = "/healthanalytics.HealthAnalyticsService/AddLifestyleData"
 	HealthAnalyticsService_GetLifestyleData_FullMethodName              = "/healthanalytics.HealthAnalyticsService/GetLifestyleData"
+	HealthAnalyticsService_GetAllLifestyleData_FullMethodName           = "/healthanalytics.HealthAnalyticsService/GetAllLifestyleData"
 	HealthAnalyticsService_UpdateLifestyleData_FullMethodName           = "/healthanalytics.HealthAnalyticsService/UpdateLifestyleData"
 	HealthAnalyticsService_DeleteLifestyleData_FullMethodName           = "/healthanalytics.HealthAnalyticsService/DeleteLifestyleData"
 	HealthAnalyticsService_AddWearableData_FullMethodName               = "/healthanalytics.HealthAnalyticsService/AddWearableData"
 	HealthAnalyticsService_GetWearableData_FullMethodName               = "/healthanalytics.HealthAnalyticsService/GetWearableData"
+	HealthAnalyticsService_GetAllWearableData_FullMethodName            = "/healthanalytics.HealthAnalyticsService/GetAllWearableData"
 	HealthAnalyticsService_UpdateWearableData_FullMethodName            = "/healthanalytics.HealthAnalyticsService/UpdateWearableData"
 	HealthAnalyticsService_DeleteWearableData_FullMethodName            = "/healthanalytics.HealthAnalyticsService/DeleteWearableData"
 	HealthAnalyticsService_GenerateHealthRecommendations_FullMethodName = "/healthanalytics.HealthAnalyticsService/GenerateHealthRecommendations"
@@ -54,19 +52,16 @@ type HealthAnalyticsServiceClient interface {
 	UpdateMedicalRecord(ctx context.Context, in *UpdateMedicalRecordRequest, opts ...grpc.CallOption) (*UpdateMedicalRecordResponse, error)
 	DeleteMedicalRecord(ctx context.Context, in *DeleteMedicalRecordRequest, opts ...grpc.CallOption) (*DeleteMedicalRecordResponse, error)
 	ListMedicalRecords(ctx context.Context, in *ListMedicalRecordsRequest, opts ...grpc.CallOption) (*ListMedicalRecordsResponse, error)
-	// Genetik ma'lumotlar uchun RPC lar
-	AddGeneticData(ctx context.Context, in *AddGeneticDataRequest, opts ...grpc.CallOption) (*AddGeneticDataResponse, error)
-	GetGeneticData(ctx context.Context, in *GetGeneticDataRequest, opts ...grpc.CallOption) (*GetGeneticDataResponse, error)
-	UpdateGeneticData(ctx context.Context, in *UpdateGeneticDataRequest, opts ...grpc.CallOption) (*UpdateGeneticDataResponse, error)
-	DeleteGeneticData(ctx context.Context, in *DeleteGeneticDataRequest, opts ...grpc.CallOption) (*DeleteGeneticDataResponse, error)
 	// Turmush tarzi ma'lumotlari uchun RPC lar
 	AddLifestyleData(ctx context.Context, in *AddLifestyleDataRequest, opts ...grpc.CallOption) (*AddLifestyleDataResponse, error)
 	GetLifestyleData(ctx context.Context, in *GetLifestyleDataRequest, opts ...grpc.CallOption) (*GetLifestyleDataResponse, error)
+	GetAllLifestyleData(ctx context.Context, in *GetAllLifestyleDataRequest, opts ...grpc.CallOption) (*GetAllLifestyleDataResponse, error)
 	UpdateLifestyleData(ctx context.Context, in *UpdateLifestyleDataRequest, opts ...grpc.CallOption) (*UpdateLifestyleDataResponse, error)
 	DeleteLifestyleData(ctx context.Context, in *DeleteLifestyleDataRequest, opts ...grpc.CallOption) (*DeleteLifestyleDataResponse, error)
 	// Kiyiladigan qurilma ma'lumotlari uchun RPC lar
 	AddWearableData(ctx context.Context, in *AddWearableDataRequest, opts ...grpc.CallOption) (*AddWearableDataResponse, error)
 	GetWearableData(ctx context.Context, in *GetWearableDataRequest, opts ...grpc.CallOption) (*GetWearableDataResponse, error)
+	GetAllWearableData(ctx context.Context, in *GetAllWearableDataRequest, opts ...grpc.CallOption) (*GetAllWearableDataResponse, error)
 	UpdateWearableData(ctx context.Context, in *UpdateWearableDataRequest, opts ...grpc.CallOption) (*UpdateWearableDataResponse, error)
 	DeleteWearableData(ctx context.Context, in *DeleteWearableDataRequest, opts ...grpc.CallOption) (*DeleteWearableDataResponse, error)
 	// Sog'liq tavsiyalari va monitoringi uchun RPC lar
@@ -134,46 +129,6 @@ func (c *healthAnalyticsServiceClient) ListMedicalRecords(ctx context.Context, i
 	return out, nil
 }
 
-func (c *healthAnalyticsServiceClient) AddGeneticData(ctx context.Context, in *AddGeneticDataRequest, opts ...grpc.CallOption) (*AddGeneticDataResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddGeneticDataResponse)
-	err := c.cc.Invoke(ctx, HealthAnalyticsService_AddGeneticData_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *healthAnalyticsServiceClient) GetGeneticData(ctx context.Context, in *GetGeneticDataRequest, opts ...grpc.CallOption) (*GetGeneticDataResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetGeneticDataResponse)
-	err := c.cc.Invoke(ctx, HealthAnalyticsService_GetGeneticData_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *healthAnalyticsServiceClient) UpdateGeneticData(ctx context.Context, in *UpdateGeneticDataRequest, opts ...grpc.CallOption) (*UpdateGeneticDataResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateGeneticDataResponse)
-	err := c.cc.Invoke(ctx, HealthAnalyticsService_UpdateGeneticData_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *healthAnalyticsServiceClient) DeleteGeneticData(ctx context.Context, in *DeleteGeneticDataRequest, opts ...grpc.CallOption) (*DeleteGeneticDataResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteGeneticDataResponse)
-	err := c.cc.Invoke(ctx, HealthAnalyticsService_DeleteGeneticData_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *healthAnalyticsServiceClient) AddLifestyleData(ctx context.Context, in *AddLifestyleDataRequest, opts ...grpc.CallOption) (*AddLifestyleDataResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddLifestyleDataResponse)
@@ -188,6 +143,16 @@ func (c *healthAnalyticsServiceClient) GetLifestyleData(ctx context.Context, in 
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetLifestyleDataResponse)
 	err := c.cc.Invoke(ctx, HealthAnalyticsService_GetLifestyleData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *healthAnalyticsServiceClient) GetAllLifestyleData(ctx context.Context, in *GetAllLifestyleDataRequest, opts ...grpc.CallOption) (*GetAllLifestyleDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAllLifestyleDataResponse)
+	err := c.cc.Invoke(ctx, HealthAnalyticsService_GetAllLifestyleData_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -228,6 +193,16 @@ func (c *healthAnalyticsServiceClient) GetWearableData(ctx context.Context, in *
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetWearableDataResponse)
 	err := c.cc.Invoke(ctx, HealthAnalyticsService_GetWearableData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *healthAnalyticsServiceClient) GetAllWearableData(ctx context.Context, in *GetAllWearableDataRequest, opts ...grpc.CallOption) (*GetAllWearableDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAllWearableDataResponse)
+	err := c.cc.Invoke(ctx, HealthAnalyticsService_GetAllWearableData_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -306,19 +281,16 @@ type HealthAnalyticsServiceServer interface {
 	UpdateMedicalRecord(context.Context, *UpdateMedicalRecordRequest) (*UpdateMedicalRecordResponse, error)
 	DeleteMedicalRecord(context.Context, *DeleteMedicalRecordRequest) (*DeleteMedicalRecordResponse, error)
 	ListMedicalRecords(context.Context, *ListMedicalRecordsRequest) (*ListMedicalRecordsResponse, error)
-	// Genetik ma'lumotlar uchun RPC lar
-	AddGeneticData(context.Context, *AddGeneticDataRequest) (*AddGeneticDataResponse, error)
-	GetGeneticData(context.Context, *GetGeneticDataRequest) (*GetGeneticDataResponse, error)
-	UpdateGeneticData(context.Context, *UpdateGeneticDataRequest) (*UpdateGeneticDataResponse, error)
-	DeleteGeneticData(context.Context, *DeleteGeneticDataRequest) (*DeleteGeneticDataResponse, error)
 	// Turmush tarzi ma'lumotlari uchun RPC lar
 	AddLifestyleData(context.Context, *AddLifestyleDataRequest) (*AddLifestyleDataResponse, error)
 	GetLifestyleData(context.Context, *GetLifestyleDataRequest) (*GetLifestyleDataResponse, error)
+	GetAllLifestyleData(context.Context, *GetAllLifestyleDataRequest) (*GetAllLifestyleDataResponse, error)
 	UpdateLifestyleData(context.Context, *UpdateLifestyleDataRequest) (*UpdateLifestyleDataResponse, error)
 	DeleteLifestyleData(context.Context, *DeleteLifestyleDataRequest) (*DeleteLifestyleDataResponse, error)
 	// Kiyiladigan qurilma ma'lumotlari uchun RPC lar
 	AddWearableData(context.Context, *AddWearableDataRequest) (*AddWearableDataResponse, error)
 	GetWearableData(context.Context, *GetWearableDataRequest) (*GetWearableDataResponse, error)
+	GetAllWearableData(context.Context, *GetAllWearableDataRequest) (*GetAllWearableDataResponse, error)
 	UpdateWearableData(context.Context, *UpdateWearableDataRequest) (*UpdateWearableDataResponse, error)
 	DeleteWearableData(context.Context, *DeleteWearableDataRequest) (*DeleteWearableDataResponse, error)
 	// Sog'liq tavsiyalari va monitoringi uchun RPC lar
@@ -348,23 +320,14 @@ func (UnimplementedHealthAnalyticsServiceServer) DeleteMedicalRecord(context.Con
 func (UnimplementedHealthAnalyticsServiceServer) ListMedicalRecords(context.Context, *ListMedicalRecordsRequest) (*ListMedicalRecordsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListMedicalRecords not implemented")
 }
-func (UnimplementedHealthAnalyticsServiceServer) AddGeneticData(context.Context, *AddGeneticDataRequest) (*AddGeneticDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddGeneticData not implemented")
-}
-func (UnimplementedHealthAnalyticsServiceServer) GetGeneticData(context.Context, *GetGeneticDataRequest) (*GetGeneticDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetGeneticData not implemented")
-}
-func (UnimplementedHealthAnalyticsServiceServer) UpdateGeneticData(context.Context, *UpdateGeneticDataRequest) (*UpdateGeneticDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateGeneticData not implemented")
-}
-func (UnimplementedHealthAnalyticsServiceServer) DeleteGeneticData(context.Context, *DeleteGeneticDataRequest) (*DeleteGeneticDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteGeneticData not implemented")
-}
 func (UnimplementedHealthAnalyticsServiceServer) AddLifestyleData(context.Context, *AddLifestyleDataRequest) (*AddLifestyleDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddLifestyleData not implemented")
 }
 func (UnimplementedHealthAnalyticsServiceServer) GetLifestyleData(context.Context, *GetLifestyleDataRequest) (*GetLifestyleDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLifestyleData not implemented")
+}
+func (UnimplementedHealthAnalyticsServiceServer) GetAllLifestyleData(context.Context, *GetAllLifestyleDataRequest) (*GetAllLifestyleDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllLifestyleData not implemented")
 }
 func (UnimplementedHealthAnalyticsServiceServer) UpdateLifestyleData(context.Context, *UpdateLifestyleDataRequest) (*UpdateLifestyleDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateLifestyleData not implemented")
@@ -377,6 +340,9 @@ func (UnimplementedHealthAnalyticsServiceServer) AddWearableData(context.Context
 }
 func (UnimplementedHealthAnalyticsServiceServer) GetWearableData(context.Context, *GetWearableDataRequest) (*GetWearableDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWearableData not implemented")
+}
+func (UnimplementedHealthAnalyticsServiceServer) GetAllWearableData(context.Context, *GetAllWearableDataRequest) (*GetAllWearableDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllWearableData not implemented")
 }
 func (UnimplementedHealthAnalyticsServiceServer) UpdateWearableData(context.Context, *UpdateWearableDataRequest) (*UpdateWearableDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateWearableData not implemented")
@@ -500,78 +466,6 @@ func _HealthAnalyticsService_ListMedicalRecords_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
-func _HealthAnalyticsService_AddGeneticData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddGeneticDataRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(HealthAnalyticsServiceServer).AddGeneticData(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: HealthAnalyticsService_AddGeneticData_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HealthAnalyticsServiceServer).AddGeneticData(ctx, req.(*AddGeneticDataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _HealthAnalyticsService_GetGeneticData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetGeneticDataRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(HealthAnalyticsServiceServer).GetGeneticData(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: HealthAnalyticsService_GetGeneticData_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HealthAnalyticsServiceServer).GetGeneticData(ctx, req.(*GetGeneticDataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _HealthAnalyticsService_UpdateGeneticData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateGeneticDataRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(HealthAnalyticsServiceServer).UpdateGeneticData(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: HealthAnalyticsService_UpdateGeneticData_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HealthAnalyticsServiceServer).UpdateGeneticData(ctx, req.(*UpdateGeneticDataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _HealthAnalyticsService_DeleteGeneticData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteGeneticDataRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(HealthAnalyticsServiceServer).DeleteGeneticData(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: HealthAnalyticsService_DeleteGeneticData_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HealthAnalyticsServiceServer).DeleteGeneticData(ctx, req.(*DeleteGeneticDataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _HealthAnalyticsService_AddLifestyleData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddLifestyleDataRequest)
 	if err := dec(in); err != nil {
@@ -604,6 +498,24 @@ func _HealthAnalyticsService_GetLifestyleData_Handler(srv interface{}, ctx conte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(HealthAnalyticsServiceServer).GetLifestyleData(ctx, req.(*GetLifestyleDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _HealthAnalyticsService_GetAllLifestyleData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllLifestyleDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HealthAnalyticsServiceServer).GetAllLifestyleData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HealthAnalyticsService_GetAllLifestyleData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HealthAnalyticsServiceServer).GetAllLifestyleData(ctx, req.(*GetAllLifestyleDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -676,6 +588,24 @@ func _HealthAnalyticsService_GetWearableData_Handler(srv interface{}, ctx contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(HealthAnalyticsServiceServer).GetWearableData(ctx, req.(*GetWearableDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _HealthAnalyticsService_GetAllWearableData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllWearableDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HealthAnalyticsServiceServer).GetAllWearableData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HealthAnalyticsService_GetAllWearableData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HealthAnalyticsServiceServer).GetAllWearableData(ctx, req.(*GetAllWearableDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -816,28 +746,16 @@ var HealthAnalyticsService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _HealthAnalyticsService_ListMedicalRecords_Handler,
 		},
 		{
-			MethodName: "AddGeneticData",
-			Handler:    _HealthAnalyticsService_AddGeneticData_Handler,
-		},
-		{
-			MethodName: "GetGeneticData",
-			Handler:    _HealthAnalyticsService_GetGeneticData_Handler,
-		},
-		{
-			MethodName: "UpdateGeneticData",
-			Handler:    _HealthAnalyticsService_UpdateGeneticData_Handler,
-		},
-		{
-			MethodName: "DeleteGeneticData",
-			Handler:    _HealthAnalyticsService_DeleteGeneticData_Handler,
-		},
-		{
 			MethodName: "AddLifestyleData",
 			Handler:    _HealthAnalyticsService_AddLifestyleData_Handler,
 		},
 		{
 			MethodName: "GetLifestyleData",
 			Handler:    _HealthAnalyticsService_GetLifestyleData_Handler,
+		},
+		{
+			MethodName: "GetAllLifestyleData",
+			Handler:    _HealthAnalyticsService_GetAllLifestyleData_Handler,
 		},
 		{
 			MethodName: "UpdateLifestyleData",
@@ -854,6 +772,10 @@ var HealthAnalyticsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWearableData",
 			Handler:    _HealthAnalyticsService_GetWearableData_Handler,
+		},
+		{
+			MethodName: "GetAllWearableData",
+			Handler:    _HealthAnalyticsService_GetAllWearableData_Handler,
 		},
 		{
 			MethodName: "UpdateWearableData",

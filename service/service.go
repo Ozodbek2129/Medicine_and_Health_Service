@@ -76,6 +76,15 @@ func (s *HealthService) AddLifestyleData(ctx context.Context,req *pb.AddLifestyl
 	return resp,nil
 }
 
+func (s *HealthService) GetAllLifestyleData(ctx context.Context,req *pb.GetAllLifestyleDataRequest)(*pb.GetAllLifestyleDataResponse,error){
+	resp,err:=s.health.GetAllLifestyleData(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("GetAllLifestyleData service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
 func (s *HealthService) GetLifestyleData(ctx context.Context,req *pb.GetLifestyleDataRequest)(*pb.GetLifestyleDataResponse,error){
 	resp,err:=s.health.GetLifestyleData(ctx,req)
 	if err!=nil{
@@ -107,6 +116,15 @@ func (s *HealthService) AddWearableData(ctx context.Context,req *pb.AddWearableD
 	resp,err:=s.health.AddWearableData(ctx,req)
 	if err!=nil{
 		s.log.Error(fmt.Sprintf("AddWearableData service da xatolik: %v",err))
+		return nil,err
+	}
+	return resp,nil
+}
+
+func (s *HealthService) GetAllWearableData(ctx context.Context,req *pb.GetAllWearableDataRequest)(*pb.GetAllWearableDataResponse,error){
+	resp,err:=s.health.GetAllWearableData(ctx,req)
+	if err!=nil{
+		s.log.Error(fmt.Sprintf("GetAllWearableData service da xatolik: %v",err))
 		return nil,err
 	}
 	return resp,nil
