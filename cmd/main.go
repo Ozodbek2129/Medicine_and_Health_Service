@@ -2,16 +2,18 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"health/config"
 	pb "health/genproto/health_analytics"
 	mongoDb "health/mongodb"
 	"health/service"
 	"log"
 	"net"
+	"time"
 
 	"github.com/redis/go-redis/v9"
-	"google.golang.org/grpc"
 	"github.com/streadway/amqp"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -32,11 +34,11 @@ func main() {
 	}()
 
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379", // Redis serverining manzili
+		Addr:     "redis:6379", // Redis serverining manzili
 		Password: "",               // Parol agar mavjud bo'lsa
 		DB:       0,                // Default DB ni ishlatish
 	})
-
+	time.Sleep(20 * time.Second)
 	// RabbitMQ bilan ulanish
 	amqpChannel, err := setupRabbitMQ()
 	if err != nil {
@@ -44,7 +46,7 @@ func main() {
 	}
 	defer amqpChannel.Close()
 
-	mongoDbRepo := mongoDb.NewHealth(mongodb,rdb,amqpChannel)
+	mongoDbRepo := mongoDb.NewHealth(mongodb, rdb, amqpChannel)
 	HelathService := service.NewHealthService(mongoDbRepo)
 
 	go mongoDbRepo.ConsumeWearableDataQueue()
@@ -62,15 +64,15 @@ func main() {
 
 func setupRabbitMQ() (*amqp.Channel, error) {
 	// RabbitMQ serveriga ulanish
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to connect to RabbitMQ: %v", err)
 	}
 
 	// Kanali yaratish
 	ch, err := conn.Channel()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to open a channel: %v", err)
 	}
 
 	return ch, nil

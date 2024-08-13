@@ -1,0 +1,41 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example 
+    volumes:
+      - db:/data/db
+    networks:
+      - medic
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - medic
+
+  health_service:
+    container_name: health
+    build: .
+    ports:
+      - "50052:50052"
+    networks:
+     - medic
+    depends_on:
+      - mongodb
+      - redis
+
+networks:
+  medic:
+    external: true
+
+volumes:
+  db:
+  redis:
+  mongodb:
