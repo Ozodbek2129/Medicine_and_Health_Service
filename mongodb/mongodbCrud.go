@@ -15,6 +15,8 @@ import (
 
 	pb "health/genproto/health_analytics"
 
+	"github.com/streadway/amqp"
+
 	"github.com/redis/go-redis/v9"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -22,16 +24,18 @@ import (
 )
 
 type Health struct {
-	Logger *slog.Logger
-	Db     *mongo.Database
-	Redis  *redis.Client
+	Logger          *slog.Logger
+	Db              *mongo.Database
+	Redis           *redis.Client
+	RabbitMQChannel *amqp.Channel
 }
 
-func NewHealth(mdb *mongo.Database,rdb *redis.Client) *Health {
+func NewHealth(mdb *mongo.Database, rdb *redis.Client, amqpChannel *amqp.Channel) *Health {
 	return &Health{
-		Logger: logger.NewLogger(),
-		Db:     mdb,
-		Redis: rdb,
+		Logger:          logger.NewLogger(),
+		Db:              mdb,
+		Redis:           rdb,
+		RabbitMQChannel: amqpChannel,
 	}
 }
 
@@ -309,40 +313,53 @@ func (h *Health) DeleteLifestyleData(ctx context.Context, req *pb.DeleteLifestyl
 }
 
 // AddWearableData yangi kiyiladigan qurilma ma'lumotlarini qo'shish uchun
-func (h *Health) AddWearableData(ctx context.Context, req *pb.AddWearableDataRequest) (*pb.AddWearableDataResponse, error) {
+// func (h *Health) ConsumeWearableDataQueue() {
+// 	// RabbitMQ queue’dan xabarlarni olish
+// 	messages, err := h.RabbitMQChannel.Consume(
+// 		"wearable_data_queue", // Queue nomi
+// 		"",                    // Consumer tag
+// 		true,                  // Auto-ack
+// 		false,                 // Exclusive
+// 		false,                 // No-local
+// 		false,                 // No-wait
+// 		nil,                   // Arguments
+// 	)
+// 	if err != nil {
+// 		log.Fatal("failed to register a consumer: %w", err)
+// 		return
+// 	}
 
-	id := uuid.NewString()
-	vaqt := time.Now().Format(time.RFC3339)
+// 	for msg := range messages {
+// 		var message struct {
+// 			Id string `json:"id"`
+// 			*pb.AddWearableDataRequest
+// 		}
+// 		err := json.Unmarshal(msg.Body, &message)
+// 		if err != nil {
+// 			h.Logger.Error("Failed to unmarshal message", "error", err)
+// 			return
+// 		}
 
-	wearableData := bson.M{
-		"id":                id,
-		"userid":            req.UserId,
-		"devicetype":        req.DeviceType,
-		"datatype":          req.DataType,
-		"datavalue":         req.DataValue,
-		"recordedtimestamp": req.RecordedTimestamp,
-		"createdat":         vaqt,
-		"updatedat":         vaqt,
-		"deletedat":         "0",
-	}
+// 		wearableData := bson.M{
+// 			"id":                message.Id,
+// 			"userid":            message.UserId,
+// 			"devicetype":        message.DeviceType,
+// 			"datatype":          message.DataType,
+// 			"datavalue":         message.DataValue,
+// 			"recordedtimestamp": message.RecordedTimestamp,
+// 			"createdat":         time.Now().Format(time.RFC3339),
+// 			"updatedat":         time.Now().Format(time.RFC3339),
+// 			"deletedat":         "0",
+// 		}
+// 		fmt.Println(wearableData)
 
-	_, err := h.Db.Collection("wearable_data").InsertOne(ctx, wearableData)
-	if err != nil {
-		h.Logger.Error("Failed to add wearable data", "error", err)
-		return nil, err
-	}
-
-	return &pb.AddWearableDataResponse{WearableData: &pb.WearableData{
-		Id:                id,
-		UserId:            req.UserId,
-		DeviceType:        req.DeviceType,
-		DataType:          req.DataType,
-		DataValue:         req.DataValue,
-		RecordedTimestamp: req.RecordedTimestamp,
-		CreatedAt:         vaqt,
-		UpdatedAt:         vaqt,
-	}}, nil
-}
+// 		_, err = h.Db.Collection("wearable_data").InsertOne(context.Background(), wearableData)
+// 		if err != nil {
+// 			h.Logger.Error("Failed to insert wearable data into MongoDB", "error", err)
+// 			return
+// 		}
+// 	}
+// }
 
 // GetAllWearableData metodi
 func (h *Health) GetAllWearableData(ctx context.Context, req *pb.GetAllWearableDataRequest) (*pb.GetAllWearableDataResponse, error) {
@@ -450,53 +467,53 @@ func (h *Health) DeleteWearableData(ctx context.Context, req *pb.DeleteWearableD
 	return &pb.DeleteWearableDataResponse{Success: true}, nil
 }
 
-func (h *Health) GenerateHealthRecommendations(ctx context.Context, req *pb.GenerateHealthRecommendationsRequest) (*pb.GenerateHealthRecommendationsResponse, error) {
-	coll := h.Db.Collection("health")
+// func (h *Health) GenerateHealthRecommendations(ctx context.Context, req *pb.GenerateHealthRecommendationsRequest) (*pb.GenerateHealthRecommendationsResponse, error) {
+// 	coll := h.Db.Collection("health")
 
-	id := uuid.NewString()
-	date := time.Now().Format("2006/01/02")
+// 	id := uuid.NewString()
+// 	date := time.Now().Format("2006/01/02")
 
-	_, err := coll.InsertOne(ctx, bson.M{
-		"id":                  id,
-		"user_id":             req.UserId,
-		"recommendation_type": req.RecommendationType,
-		"description":         req.Description,
-		"priority":            req.Priority,
-		"created_at":          date,
-		"updated_at":          date,
-		"deleted_at":          "0",
-	})
+// 	_, err := coll.InsertOne(ctx, bson.M{
+// 		"id":                  id,
+// 		"user_id":             req.UserId,
+// 		"recommendation_type": req.RecommendationType,
+// 		"description":         req.Description,
+// 		"priority":            req.Priority,
+// 		"created_at":          date,
+// 		"updated_at":          date,
+// 		"deleted_at":          "0",
+// 	})
 
-	if err != nil {
-		return nil, err
-	}
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	recod := pb.HealthRecommendation{
-		Id:                 id,
-		UserId:             req.UserId,
-		RecommendationType: req.RecommendationType,
-		Description:        req.Description,
-		Priority:           req.Priority,
-		CreatedAt:          date,
-		UpdatedAt:          date,
-	}
+// 	recod := pb.HealthRecommendation{
+// 		Id:                 id,
+// 		UserId:             req.UserId,
+// 		RecommendationType: req.RecommendationType,
+// 		Description:        req.Description,
+// 		Priority:           req.Priority,
+// 		CreatedAt:          date,
+// 		UpdatedAt:          date,
+// 	}
 
-	// Redisga yozish
-	redisKey := req.UserId
-	redisValue, err := json.Marshal(recod)
-	if err != nil {
-		return nil, err
-	}
+// 	// Redisga yozish
+// 	redisKey := req.UserId
+// 	redisValue, err := json.Marshal(recod)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	err = h.Redis.Set(ctx, redisKey, redisValue, 0).Err()
-	if err != nil {
-		return nil, err
-	}
+// 	err = h.Redis.Set(ctx, redisKey, redisValue, 0).Err()
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return &pb.GenerateHealthRecommendationsResponse{
-		Recommendations: &recod,
-	}, nil
-}
+// 	return &pb.GenerateHealthRecommendationsResponse{
+// 		Recommendations: &recod,
+// 	}, nil
+// }
 
 func (h *Health) GenerateHealthRecommendationsId(ctx context.Context, req *pb.GenerateHealthRecommendationsIdRequest) (*pb.GenerateHealthRecommendationsIdResponse, error) {
 	collection := h.Db.Collection("health")
@@ -550,15 +567,14 @@ func (h *Health) GetRealtimeHealthMonitoring(ctx context.Context, req *pb.GetRea
 		return nil, fmt.Errorf("no health data found for today's date")
 	}
 
-	resp:=pb.GetRealtimeHealthMonitoringResponse{
+	resp := pb.GetRealtimeHealthMonitoringResponse{
 		RecommendationType: user.RecommendationType,
-		Description: user.Description,
-		Priority: user.Priority,
+		Description:        user.Description,
+		Priority:           user.Priority,
 	}
 
 	return &resp, nil
 }
-
 
 func (h *Health) GetDailyHealthSummary(ctx context.Context, req *pb.GetDailyHealthSummaryRequest) (*pb.GetDailyHealthSummaryResponse, error) {
 	var summary pb.GetDailyHealthSummaryResponse

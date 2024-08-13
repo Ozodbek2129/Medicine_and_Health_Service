@@ -7,6 +7,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/spf13/cast v1.7.0
+	github.com/streadway/amqp v1.1.0
 	go.mongodb.org/mongo-driver v1.16.1
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.2

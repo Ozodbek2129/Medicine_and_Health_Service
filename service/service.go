@@ -112,14 +112,14 @@ func (s *HealthService) DeleteLifestyleData(ctx context.Context,req *pb.DeleteLi
 	return resp,nil
 }
 
-func (s *HealthService) AddWearableData(ctx context.Context,req *pb.AddWearableDataRequest)(*pb.AddWearableDataResponse,error){
-	resp,err:=s.health.AddWearableData(ctx,req)
-	if err!=nil{
-		s.log.Error(fmt.Sprintf("AddWearableData service da xatolik: %v",err))
-		return nil,err
-	}
-	return resp,nil
-}
+// func (s *HealthService) AddWearableData(ctx context.Context,req *pb.AddWearableDataRequest)(*pb.AddWearableDataResponse,error){
+// 	resp,err:=s.health.AddWearableData(ctx,req)
+// 	if err!=nil{
+// 		s.log.Error(fmt.Sprintf("AddWearableData service da xatolik: %v",err))
+// 		return nil,err
+// 	}
+// 	return resp,nil
+// }
 
 func (s *HealthService) GetAllWearableData(ctx context.Context,req *pb.GetAllWearableDataRequest)(*pb.GetAllWearableDataResponse,error){
 	resp,err:=s.health.GetAllWearableData(ctx,req)
@@ -157,14 +157,14 @@ func (s *HealthService) DeleteWearableData(ctx context.Context,req *pb.DeleteWea
 	return resp,nil
 }
 
-func (s *HealthService) GenerateHealthRecommendations(ctx context.Context,req *pb.GenerateHealthRecommendationsRequest)(*pb.GenerateHealthRecommendationsResponse,error){
-	resp,err:=s.health.GenerateHealthRecommendations(ctx,req)
-	if err!=nil{
-		s.log.Error(fmt.Sprintf("GenerateHealthRecommendations service da xatolik: %v",err))
-		return nil,err
-	}
-	return resp,nil
-}
+// func (s *HealthService) GenerateHealthRecommendations(ctx context.Context,req *pb.GenerateHealthRecommendationsRequest)(*pb.GenerateHealthRecommendationsResponse,error){
+// 	resp,err:=s.health.GenerateHealthRecommendations(ctx,req)
+// 	if err!=nil{
+// 		s.log.Error(fmt.Sprintf("GenerateHealthRecommendations service da xatolik: %v",err))
+// 		return nil,err
+// 	}
+// 	return resp,nil
+// }
 
 func (s *HealthService) GenerateHealthRecommendationsId(ctx context.Context,req *pb.GenerateHealthRecommendationsIdRequest)(*pb.GenerateHealthRecommendationsIdResponse,error){
 	resp,err:=s.health.GenerateHealthRecommendationsId(ctx,req)
