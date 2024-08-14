@@ -11,7 +11,7 @@ import (
 
 func NewMongoClient() (*mongo.Client, *mongo.Database, error) {
 	cfg := config.Load()
-	clientOptions := options.Client().ApplyURI(cfg.MongoURI)
+	clientOptions := options.Client().ApplyURI(cfg.MongoURI).SetAuth(options.Credential{Username: "root", Password: "example"})
 
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {

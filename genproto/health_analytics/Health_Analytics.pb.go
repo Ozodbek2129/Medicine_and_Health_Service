@@ -2970,7 +2970,7 @@ var file_Medicine_and_Health_protos_HealthAnalytics_Health_Analytics_proto_rawDe
 	0x0b, 0x32, 0x25, 0x2e, 0x68, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x61, 0x6e, 0x61, 0x6c, 0x79, 0x74,
 	0x69, 0x63, 0x73, 0x2e, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x52, 0x65, 0x63, 0x6f, 0x6d, 0x6d,
 	0x65, 0x6e, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x06, 0x68, 0x65, 0x61, 0x6c, 0x74, 0x68,
-	0x32, 0xa4, 0x12, 0x0a, 0x16, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x41, 0x6e, 0x61, 0x6c, 0x79,
+	0x32, 0x9f, 0x13, 0x0a, 0x16, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x41, 0x6e, 0x61, 0x6c, 0x79,
 	0x74, 0x69, 0x63, 0x73, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x67, 0x0a, 0x10, 0x41,
 	0x64, 0x64, 0x4d, 0x65, 0x64, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12,
 	0x28, 0x2e, 0x68, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x61, 0x6e, 0x61, 0x6c, 0x79, 0x74, 0x69, 0x63,
@@ -3116,9 +3116,17 @@ var file_Medicine_and_Health_protos_HealthAnalytics_Health_Analytics_proto_rawDe
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2f, 0x2e, 0x68, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x61,
 	0x6e, 0x61, 0x6c, 0x79, 0x74, 0x69, 0x63, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x57, 0x65, 0x65, 0x6b,
 	0x6c, 0x79, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x53, 0x75, 0x6d, 0x6d, 0x61, 0x72, 0x79, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x1b, 0x5a, 0x19, 0x67, 0x65, 0x6e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x2f, 0x68, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x5f, 0x61, 0x6e, 0x61, 0x6c, 0x79,
-	0x74, 0x69, 0x63, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x79, 0x0a, 0x0c, 0x55, 0x73, 0x65, 0x72, 0x49,
+	0x44, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x12, 0x33, 0x2e, 0x68, 0x65, 0x61, 0x6c, 0x74, 0x68,
+	0x61, 0x6e, 0x61, 0x6c, 0x79, 0x74, 0x69, 0x63, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x52, 0x65, 0x61,
+	0x6c, 0x74, 0x69, 0x6d, 0x65, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x4d, 0x6f, 0x6e, 0x69, 0x74,
+	0x6f, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x34, 0x2e, 0x68,
+	0x65, 0x61, 0x6c, 0x74, 0x68, 0x61, 0x6e, 0x61, 0x6c, 0x79, 0x74, 0x69, 0x63, 0x73, 0x2e, 0x47,
+	0x65, 0x74, 0x52, 0x65, 0x61, 0x6c, 0x74, 0x69, 0x6d, 0x65, 0x48, 0x65, 0x61, 0x6c, 0x74, 0x68,
+	0x4d, 0x6f, 0x6e, 0x69, 0x74, 0x6f, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x42, 0x1b, 0x5a, 0x19, 0x67, 0x65, 0x6e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x68,
+	0x65, 0x61, 0x6c, 0x74, 0x68, 0x5f, 0x61, 0x6e, 0x61, 0x6c, 0x79, 0x74, 0x69, 0x63, 0x73, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3213,28 +3221,30 @@ var file_Medicine_and_Health_protos_HealthAnalytics_Health_Analytics_proto_depId
 	38, // 29: healthanalytics.HealthAnalyticsService.GetRealtimeHealthMonitoring:input_type -> healthanalytics.GetRealtimeHealthMonitoringRequest
 	40, // 30: healthanalytics.HealthAnalyticsService.GetDailyHealthSummary:input_type -> healthanalytics.GetDailyHealthSummaryRequest
 	42, // 31: healthanalytics.HealthAnalyticsService.GetWeeklyHealthSummary:input_type -> healthanalytics.GetWeeklyHealthSummaryRequest
-	8,  // 32: healthanalytics.HealthAnalyticsService.AddMedicalRecord:output_type -> healthanalytics.AddMedicalRecordResponse
-	10, // 33: healthanalytics.HealthAnalyticsService.GetMedicalRecord:output_type -> healthanalytics.GetMedicalRecordResponse
-	12, // 34: healthanalytics.HealthAnalyticsService.UpdateMedicalRecord:output_type -> healthanalytics.UpdateMedicalRecordResponse
-	14, // 35: healthanalytics.HealthAnalyticsService.DeleteMedicalRecord:output_type -> healthanalytics.DeleteMedicalRecordResponse
-	16, // 36: healthanalytics.HealthAnalyticsService.ListMedicalRecords:output_type -> healthanalytics.ListMedicalRecordsResponse
-	19, // 37: healthanalytics.HealthAnalyticsService.AddLifestyleData:output_type -> healthanalytics.AddLifestyleDataResponse
-	21, // 38: healthanalytics.HealthAnalyticsService.GetLifestyleData:output_type -> healthanalytics.GetLifestyleDataResponse
-	4,  // 39: healthanalytics.HealthAnalyticsService.GetAllLifestyleData:output_type -> healthanalytics.GetAllLifestyleDataResponse
-	23, // 40: healthanalytics.HealthAnalyticsService.UpdateLifestyleData:output_type -> healthanalytics.UpdateLifestyleDataResponse
-	25, // 41: healthanalytics.HealthAnalyticsService.DeleteLifestyleData:output_type -> healthanalytics.DeleteLifestyleDataResponse
-	28, // 42: healthanalytics.HealthAnalyticsService.AddWearableData:output_type -> healthanalytics.AddWearableDataResponse
-	30, // 43: healthanalytics.HealthAnalyticsService.GetWearableData:output_type -> healthanalytics.GetWearableDataResponse
-	2,  // 44: healthanalytics.HealthAnalyticsService.GetAllWearableData:output_type -> healthanalytics.GetAllWearableDataResponse
-	32, // 45: healthanalytics.HealthAnalyticsService.UpdateWearableData:output_type -> healthanalytics.UpdateWearableDataResponse
-	34, // 46: healthanalytics.HealthAnalyticsService.DeleteWearableData:output_type -> healthanalytics.DeleteWearableDataResponse
-	37, // 47: healthanalytics.HealthAnalyticsService.GenerateHealthRecommendations:output_type -> healthanalytics.GenerateHealthRecommendationsResponse
-	0,  // 48: healthanalytics.HealthAnalyticsService.GenerateHealthRecommendationsId:output_type -> healthanalytics.GenerateHealthRecommendationsIdResponse
-	39, // 49: healthanalytics.HealthAnalyticsService.GetRealtimeHealthMonitoring:output_type -> healthanalytics.GetRealtimeHealthMonitoringResponse
-	41, // 50: healthanalytics.HealthAnalyticsService.GetDailyHealthSummary:output_type -> healthanalytics.GetDailyHealthSummaryResponse
-	43, // 51: healthanalytics.HealthAnalyticsService.GetWeeklyHealthSummary:output_type -> healthanalytics.GetWeeklyHealthSummaryResponse
-	32, // [32:52] is the sub-list for method output_type
-	12, // [12:32] is the sub-list for method input_type
+	38, // 32: healthanalytics.HealthAnalyticsService.UserIDHealth:input_type -> healthanalytics.GetRealtimeHealthMonitoringRequest
+	8,  // 33: healthanalytics.HealthAnalyticsService.AddMedicalRecord:output_type -> healthanalytics.AddMedicalRecordResponse
+	10, // 34: healthanalytics.HealthAnalyticsService.GetMedicalRecord:output_type -> healthanalytics.GetMedicalRecordResponse
+	12, // 35: healthanalytics.HealthAnalyticsService.UpdateMedicalRecord:output_type -> healthanalytics.UpdateMedicalRecordResponse
+	14, // 36: healthanalytics.HealthAnalyticsService.DeleteMedicalRecord:output_type -> healthanalytics.DeleteMedicalRecordResponse
+	16, // 37: healthanalytics.HealthAnalyticsService.ListMedicalRecords:output_type -> healthanalytics.ListMedicalRecordsResponse
+	19, // 38: healthanalytics.HealthAnalyticsService.AddLifestyleData:output_type -> healthanalytics.AddLifestyleDataResponse
+	21, // 39: healthanalytics.HealthAnalyticsService.GetLifestyleData:output_type -> healthanalytics.GetLifestyleDataResponse
+	4,  // 40: healthanalytics.HealthAnalyticsService.GetAllLifestyleData:output_type -> healthanalytics.GetAllLifestyleDataResponse
+	23, // 41: healthanalytics.HealthAnalyticsService.UpdateLifestyleData:output_type -> healthanalytics.UpdateLifestyleDataResponse
+	25, // 42: healthanalytics.HealthAnalyticsService.DeleteLifestyleData:output_type -> healthanalytics.DeleteLifestyleDataResponse
+	28, // 43: healthanalytics.HealthAnalyticsService.AddWearableData:output_type -> healthanalytics.AddWearableDataResponse
+	30, // 44: healthanalytics.HealthAnalyticsService.GetWearableData:output_type -> healthanalytics.GetWearableDataResponse
+	2,  // 45: healthanalytics.HealthAnalyticsService.GetAllWearableData:output_type -> healthanalytics.GetAllWearableDataResponse
+	32, // 46: healthanalytics.HealthAnalyticsService.UpdateWearableData:output_type -> healthanalytics.UpdateWearableDataResponse
+	34, // 47: healthanalytics.HealthAnalyticsService.DeleteWearableData:output_type -> healthanalytics.DeleteWearableDataResponse
+	37, // 48: healthanalytics.HealthAnalyticsService.GenerateHealthRecommendations:output_type -> healthanalytics.GenerateHealthRecommendationsResponse
+	0,  // 49: healthanalytics.HealthAnalyticsService.GenerateHealthRecommendationsId:output_type -> healthanalytics.GenerateHealthRecommendationsIdResponse
+	39, // 50: healthanalytics.HealthAnalyticsService.GetRealtimeHealthMonitoring:output_type -> healthanalytics.GetRealtimeHealthMonitoringResponse
+	41, // 51: healthanalytics.HealthAnalyticsService.GetDailyHealthSummary:output_type -> healthanalytics.GetDailyHealthSummaryResponse
+	43, // 52: healthanalytics.HealthAnalyticsService.GetWeeklyHealthSummary:output_type -> healthanalytics.GetWeeklyHealthSummaryResponse
+	39, // 53: healthanalytics.HealthAnalyticsService.UserIDHealth:output_type -> healthanalytics.GetRealtimeHealthMonitoringResponse
+	33, // [33:54] is the sub-list for method output_type
+	12, // [12:33] is the sub-list for method input_type
 	12, // [12:12] is the sub-list for extension type_name
 	12, // [12:12] is the sub-list for extension extendee
 	0,  // [0:12] is the sub-list for field type_name

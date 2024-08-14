@@ -39,6 +39,7 @@ const (
 	HealthAnalyticsService_GetRealtimeHealthMonitoring_FullMethodName     = "/healthanalytics.HealthAnalyticsService/GetRealtimeHealthMonitoring"
 	HealthAnalyticsService_GetDailyHealthSummary_FullMethodName           = "/healthanalytics.HealthAnalyticsService/GetDailyHealthSummary"
 	HealthAnalyticsService_GetWeeklyHealthSummary_FullMethodName          = "/healthanalytics.HealthAnalyticsService/GetWeeklyHealthSummary"
+	HealthAnalyticsService_UserIDHealth_FullMethodName                    = "/healthanalytics.HealthAnalyticsService/UserIDHealth"
 )
 
 // HealthAnalyticsServiceClient is the client API for HealthAnalyticsService service.
@@ -71,6 +72,7 @@ type HealthAnalyticsServiceClient interface {
 	GetRealtimeHealthMonitoring(ctx context.Context, in *GetRealtimeHealthMonitoringRequest, opts ...grpc.CallOption) (*GetRealtimeHealthMonitoringResponse, error)
 	GetDailyHealthSummary(ctx context.Context, in *GetDailyHealthSummaryRequest, opts ...grpc.CallOption) (*GetDailyHealthSummaryResponse, error)
 	GetWeeklyHealthSummary(ctx context.Context, in *GetWeeklyHealthSummaryRequest, opts ...grpc.CallOption) (*GetWeeklyHealthSummaryResponse, error)
+	UserIDHealth(ctx context.Context, in *GetRealtimeHealthMonitoringRequest, opts ...grpc.CallOption) (*GetRealtimeHealthMonitoringResponse, error)
 }
 
 type healthAnalyticsServiceClient struct {
@@ -281,6 +283,16 @@ func (c *healthAnalyticsServiceClient) GetWeeklyHealthSummary(ctx context.Contex
 	return out, nil
 }
 
+func (c *healthAnalyticsServiceClient) UserIDHealth(ctx context.Context, in *GetRealtimeHealthMonitoringRequest, opts ...grpc.CallOption) (*GetRealtimeHealthMonitoringResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetRealtimeHealthMonitoringResponse)
+	err := c.cc.Invoke(ctx, HealthAnalyticsService_UserIDHealth_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // HealthAnalyticsServiceServer is the server API for HealthAnalyticsService service.
 // All implementations must embed UnimplementedHealthAnalyticsServiceServer
 // for forward compatibility
@@ -311,6 +323,7 @@ type HealthAnalyticsServiceServer interface {
 	GetRealtimeHealthMonitoring(context.Context, *GetRealtimeHealthMonitoringRequest) (*GetRealtimeHealthMonitoringResponse, error)
 	GetDailyHealthSummary(context.Context, *GetDailyHealthSummaryRequest) (*GetDailyHealthSummaryResponse, error)
 	GetWeeklyHealthSummary(context.Context, *GetWeeklyHealthSummaryRequest) (*GetWeeklyHealthSummaryResponse, error)
+	UserIDHealth(context.Context, *GetRealtimeHealthMonitoringRequest) (*GetRealtimeHealthMonitoringResponse, error)
 	mustEmbedUnimplementedHealthAnalyticsServiceServer()
 }
 
@@ -377,6 +390,9 @@ func (UnimplementedHealthAnalyticsServiceServer) GetDailyHealthSummary(context.C
 }
 func (UnimplementedHealthAnalyticsServiceServer) GetWeeklyHealthSummary(context.Context, *GetWeeklyHealthSummaryRequest) (*GetWeeklyHealthSummaryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWeeklyHealthSummary not implemented")
+}
+func (UnimplementedHealthAnalyticsServiceServer) UserIDHealth(context.Context, *GetRealtimeHealthMonitoringRequest) (*GetRealtimeHealthMonitoringResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserIDHealth not implemented")
 }
 func (UnimplementedHealthAnalyticsServiceServer) mustEmbedUnimplementedHealthAnalyticsServiceServer() {
 }
@@ -752,6 +768,24 @@ func _HealthAnalyticsService_GetWeeklyHealthSummary_Handler(srv interface{}, ctx
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HealthAnalyticsService_UserIDHealth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRealtimeHealthMonitoringRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HealthAnalyticsServiceServer).UserIDHealth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HealthAnalyticsService_UserIDHealth_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HealthAnalyticsServiceServer).UserIDHealth(ctx, req.(*GetRealtimeHealthMonitoringRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // HealthAnalyticsService_ServiceDesc is the grpc.ServiceDesc for HealthAnalyticsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -838,6 +872,10 @@ var HealthAnalyticsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWeeklyHealthSummary",
 			Handler:    _HealthAnalyticsService_GetWeeklyHealthSummary_Handler,
+		},
+		{
+			MethodName: "UserIDHealth",
+			Handler:    _HealthAnalyticsService_UserIDHealth_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -542,29 +542,53 @@ func (h *Health) GenerateHealthRecommendationsId(ctx context.Context, req *pb.Ge
 func (h *Health) GetRealtimeHealthMonitoring(ctx context.Context, req *pb.GetRealtimeHealthMonitoringRequest) (*pb.GetRealtimeHealthMonitoringResponse, error) {
 	var user pb.HealthRecommendation
 
-	redisKey := req.UserId
-
-	val, err := h.Redis.Get(ctx, redisKey).Result()
-	if err == redis.Nil {
-		// Redisda ma'lumot topilmadi
-		return nil, fmt.Errorf("realtime health monitoring not found")
-	} else if err != nil {
-		// Redis bilan bog'liq xatolik
-		return nil, err
+	exists, err := h.Redis.Exists(ctx, req.UserId).Result()
+	if err != nil {
+		return nil, fmt.Errorf("failed to check Redis key existence: %v", err)
 	}
 
-	// Redisdan olingan JSON ma'lumotni decoding qilish
+	if exists == 0 {
+		return nil, fmt.Errorf("xatolik")
+	}
+
+	val, err := h.Redis.Get(ctx, req.UserId).Result()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get Redis data: %v", err)
+	}
+
 	err = json.Unmarshal([]byte(val), &user)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal Redis data: %v", err)
 	}
 
-	// Bugungi sana
 	date := time.Now().Format("2006/01/02")
-
-	// Redisdan olingan ma'lumotdagi `CreatedAt` maydoni bilan bugungi sanani solishtirish
 	if user.CreatedAt != date {
 		return nil, fmt.Errorf("no health data found for today's date")
+	}
+
+	resp := pb.GetRealtimeHealthMonitoringResponse{
+		RecommendationType: user.RecommendationType,
+		Description:        user.Description,
+		Priority:           user.Priority,
+	}
+
+	return &resp, nil
+}
+
+
+func (h *Health) UserIDHealth(ctx context.Context, req *pb.GetRealtimeHealthMonitoringRequest) (*pb.GetRealtimeHealthMonitoringResponse, error){
+	var user pb.HealthRecommendation
+
+	collection := h.Db.Collection("health")
+
+	filter := bson.M{"$and": []bson.M{{"user_id": req.UserId}, {"deleted_at": "0"}}}
+
+	err := collection.FindOne(ctx, filter).Decode(&user)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, fmt.Errorf("no health data found for user with ID: %v", req.UserId)
+		}
+		return nil, fmt.Errorf("failed to fetch data from MongoDB: %v", err)
 	}
 
 	resp := pb.GetRealtimeHealthMonitoringResponse{
